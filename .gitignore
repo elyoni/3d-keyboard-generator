@@ -1,0 +1,4 @@
+*.pyc
+*.scad
+*.stl
+!stl/*

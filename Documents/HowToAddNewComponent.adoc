@@ -1,0 +1,18 @@
+= How To Add New componentbase.p
+
+Every component contains three shared variables:
+
+. spacing: XY (Optional) Used for key components to support key's in default sizes
+. size: XY The size of the component in mmXmm. If spacing is set will be overwritten by spacing * [hight, width]
+. footprint_pcb: XY
+. footprint_plate: XY
+
+
+. draw_pcb_footprint(self) -> OpenSCADObject
+. draw_plate_part(self) -> OpenSCADObject
+. draw_plate_footprint(self) -> OpenSCADObject
+. draw_plate_part_addition_add(self) -> OpenSCADObject
+. get_openscad_obj(self) -> OpenSCADObject
+
+
+= Plate
