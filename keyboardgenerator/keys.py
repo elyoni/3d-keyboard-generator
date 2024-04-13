@@ -1,3 +1,4 @@
+import os
 from solid2.extensions.bosl2 import (
     cuboid,
     BOTTOM,
@@ -58,7 +59,12 @@ class Key(Part):
         ).translate([self.center_point.x, self.center_point.y, LAYER_THICKNESS])
 
     def get_openscad_obj(self) -> OpenSCADObject:
-        return import_stl(self.openscad_file_path)
+        if os.path.isfile(self.openscad_file_path):
+            return import_stl(self.openscad_file_path)
+        else:
+            raise FileNotFoundError(
+                f"File {self.openscad_file_path} does not exist. Please check the file path."
+            )
 
 
 class CherryMxKey(Key):
@@ -68,11 +74,11 @@ class CherryMxKey(Key):
     footprint_plate: XY = spacing
     footprint_pcb: XY = hole_size
 
-    openscad_file_path = "keyboardgenerator/KeyHotswap.stl"
+    openscad_file_path = "stl/KeyHotswap.stl"
 
     def get_openscad_obj(self) -> OpenSCADObject:
-        key = import_stl(self.openscad_file_path).up(
-            0.56
+        key = (
+            super().get_openscad_obj().up(0.56)
         )  # The 0.12 is the height of the STL object in fusion
         return key
 

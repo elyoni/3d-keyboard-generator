@@ -7,7 +7,7 @@ from keyboardgenerator.keyboard import Keyboard
 
 
 def main():
-    keyboard_json = arduino_only()
+    keyboard_json = get_first_keyboard_print()
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
@@ -16,9 +16,11 @@ def main():
     plate = keyboard_plate.draw_plate()
     bottom = keyboard_bottom.draw_bottom()
 
-    pcb.save_as_scad("pcb.scad")
-    plate.save_as_scad("plate.scad")
-    bottom.save_as_scad("bottom.scad")
+    os.makedirs("output", exist_ok=True)
+
+    pcb.save_as_scad(os.path.join("output", "pcb.scad"))
+    plate.save_as_scad(os.path.join("output", "plate.scad"))
+    bottom.save_as_scad(os.path.join("output", "bottom.scad"))
 
     # pcb.save_as_stl("pcb.stl")
     # plate.save_as_stl("plate.stl")
@@ -29,15 +31,17 @@ def main():
     # keyboard_bottom.draw_bottom().save_as_scad("bottom.scad")
 
     (pcb.color("gray") + plate.down(40) + bottom.up(40).color("aqua")).save_as_scad(
-        "keyboard.scad"
+        os.path.join("output", "keyboard.scad")
     )
     print("Created new scad files")
 
-    print("\tPcb scad file", os.path.abspath("pcb.scad"))
-    print("\tPlate scad file", os.path.abspath("plate.scad"))
-    print("\tBottom scad file", os.path.abspath("bottom.scad"))
+    print("\tPcb scad file", os.path.abspath(os.path.join("output", "pcb.scad")))
+    print("\tPlate scad file", os.path.abspath(os.path.join("output", "plate.scad")))
+    print("\tBottom scad file", os.path.abspath(os.path.join("output", "bottom.scad")))
     print()
-    print("\tKeyboard scad file", os.path.abspath("keyboard.scad"))
+    print(
+        "\tKeyboard scad file", os.path.abspath(os.path.join("output", "keyboard.scad"))
+    )
 
     print("done")
 
