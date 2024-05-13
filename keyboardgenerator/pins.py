@@ -17,6 +17,7 @@ from keyboardgenerator.base import (
 
 
 class Pin(Part):
+    name: str = "pin"
     draw_delta = 0.5
     hight: float = 5
     inner_high: float = 5 + LAYER_THICKNESS + draw_delta
@@ -53,7 +54,10 @@ class Pin(Part):
         LAYER_THICKNESS - LAYER_THICKNESS / 3
     )
 
-    def _draw_base_pcb(self) -> OpenSCADObject:
+    def _draw_pcb_part(self) -> OpenSCADObject:
+        return self.base_cube_fill + self.cylihder_outter - self.cylihder_inner
+
+    def _draw_plate_part(self) -> OpenSCADObject:
         return self.base_cube_fill + self.cylihder_outter - self.cylihder_inner
 
     def _draw_plate_footprint(self) -> OpenSCADObject:
@@ -61,6 +65,8 @@ class Pin(Part):
 
 
 class PinPlate(Pin):
+    name: str = "pinplate"
+
     def draw_pcb_footprint(self) -> OpenSCADObject:
         return self.cylihder_inner.rotate(self.angle_rotation).translate(
             [self.center_point.x, self.center_point.y, 0]
@@ -71,7 +77,7 @@ class PinPlate(Pin):
 
     def draw_plate_part(self) -> OpenSCADObject:
         return (
-            self._draw_base_pcb()
+            self._draw_plate_part()
             .rotate(self.angle_rotation)
             .translate([self.center_point.x, self.center_point.y, 0])
         )
@@ -83,6 +89,8 @@ class PinPlate(Pin):
 
 
 class PinPcb(Pin):
+    name: str = "pinpcb"
+
     def draw_plate_footprint(self) -> OpenSCADObject:
         return None
 
@@ -91,7 +99,7 @@ class PinPcb(Pin):
 
     def draw_pcb_part(self) -> OpenSCADObject:
         return (
-            self._draw_base_pcb()
+            self._draw_pcb_part()
             .rotate(self.angle_rotation)
             .translate([self.center_point.x, self.center_point.y, 0])
         )

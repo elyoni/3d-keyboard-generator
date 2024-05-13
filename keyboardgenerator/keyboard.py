@@ -17,29 +17,41 @@ from keyboardgenerator.base import XY, Part, LAYER_THICKNESS
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
+from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector
 
 
 ADD_LABEL = False
 
 
 def get_part_obj(part_type: str, part_profile: str | None = None):
-    if part_profile == "arduino":
-        # print("Part type is arduino")
+    print(
+        "part_type",
+        part_type,
+        "part_profile",
+        part_profile,
+        SplitKeyboardConnector.name,
+    )
+    if part_profile == Arduino.name:
         return Arduino
-    elif part_profile == "pin":
-        print("Part type is Pin")
+    elif part_profile == Pin.name:
+        # print("Part type is Pin")
         return Pin
-    elif part_profile == "pinplate":
+    elif part_profile == PinPlate.name:
         # print("Part type is PlatePin")
         return PinPlate
-    elif part_profile == "pinpcb":
+    elif part_profile == PinPcb.name:
         # print("Part type is PcbPin")
         return PinPcb
-    elif part_type == "kailh":
+    elif part_profile == KailhChocKey.name:
         # print("Part type is kailh")
         return KailhChocKey
-    elif part_type == "cherry" or part_type == "":
+    elif part_profile == SplitKeyboardConnector.name:
+        return SplitKeyboardConnector
+    elif part_profile == CherryMxKey.name:
         # print("Part type is cherry")
+        return CherryMxKey
+    # ---> Add HEAR A NEW PART <---
+    elif part_type == "":
         return CherryMxKey
     else:
         raise ValueError(

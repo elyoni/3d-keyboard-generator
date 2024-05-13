@@ -11,8 +11,9 @@ from keyboardgenerator.base import (
 
 
 class Arduino(Part):
+    name: str = "arduino"
     size = XY(19, 37)  # Size
-    footprint_plate: XY = XY(0, 0)
+    footprint_plate: XY | None = None  # XY(0, 0)
     footprint_pcb: XY = size
 
     pcb_size: tuple[float, float, float] = (size.x, size.y, 1)  # [mm,mm,mm]
@@ -45,7 +46,7 @@ class Arduino(Part):
             -self.arduino_header[Z] + LAYER_THICKNESS / 2,
         )
 
-    def _draw_base_pcb(self) -> OpenSCADObject | None:
+    def _draw_pcb_part(self) -> OpenSCADObject | None:
         baseLayer: OpenSCADObject = cube(self.pcb_size, anchor=BOTTOM)
         pins_socket_obj: OpenSCADObject = self._draw_pings()
 
@@ -55,12 +56,5 @@ class Arduino(Part):
             - pins_socket_obj.translateX(self.pins_row_space / 2)
         )
 
-    def draw_pcb_part(self) -> OpenSCADObject | None:
-        return (
-            self._draw_base_pcb()
-            .rotate(self.angle_rotation)
-            .translate(self.center_point.x, self.center_point.y, 0)
-        )
-
     def _draw_plate_footprint(self) -> OpenSCADObject | None:
-        return cube([self.footprint_plate.x, self.footprint_plate.y, 5], center=True)
+        return None

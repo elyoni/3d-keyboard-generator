@@ -185,7 +185,7 @@ class Part:
             center_rotation, angle_rotation
         )
 
-    def _draw_base_pcb(self) -> OpenSCADObject:
+    def _draw_pcb_part(self) -> OpenSCADObject:
         raise NotImplementedError(
             'This function "_draw_base_pcb" must be implemented, for the part ',
             type(self),
@@ -214,8 +214,10 @@ class Part:
 
     # # Return the part on the PCB layer as a openscad object
     def draw_pcb_part(self) -> OpenSCADObject | None:
+        if self._draw_pcb_part() is None:
+            return None
         return (
-            self._draw_base_pcb()
+            self._draw_pcb_part()
             .rotate(self.angle_rotation)
             .translate(self.center_point.x, self.center_point.y, 0)
         )
@@ -233,7 +235,7 @@ class Part:
         return None
 
     def draw_plate_footprint(self) -> OpenSCADObject | None:
-        if self.footprint_plate == XY(0, 0):
+        if self.footprint_plate is None:  # XY(0, 0):
             return None
         return (
             self._draw_plate_footprint()

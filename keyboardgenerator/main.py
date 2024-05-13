@@ -6,6 +6,7 @@ import os
 from keyboardgenerator.keyboard import Keyboard
 
 
+#
 def main():
     keyboard_json = get_arcade_print()
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
@@ -293,7 +294,7 @@ def get_first_keyboard_print() -> kle_serial.Keyboard:
 def get_arcade_print() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
-[{y:0.25,x:3.5,a:7},"Arduino",{x:2.5},"",{x:-0.25,w:0.5,h:0.5},"PinPcb"],
+[{y:0.25,x:3.5,a:7},"Arduino",{x:2.5},"",{x:-0.25,w:0.5,h:0.5},"split_keyboard_connector"],
 [{y:-0.75,x:0.15,w:0.5,h:0.5},"PinPcb",{x:-0.4},"","","",{x:-0.1,w:0.5,h:0.5},"PinPcb",{x:2.35},""],
 [{y:-0.75,x:4.9,w:0.5,h:0.5},"PinPcb",{x:-0.4},""],
 [{y:-0.65,x:6.9,w:0.5,h:0.5},"PinPlate"],

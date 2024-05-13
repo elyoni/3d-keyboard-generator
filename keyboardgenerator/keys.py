@@ -40,17 +40,21 @@ class Key(Part):
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         # Create square with a hole in the middle to add more strength to the plate
         return (
-            cuboid(
-                [self.hole_size.x + 3, self.hole_size.y + 3, LAYER_THICKNESS],
-                anchor=BOTTOM,
+            (
+                cuboid(
+                    [self.hole_size.x + 3, self.hole_size.y + 3, LAYER_THICKNESS],
+                    anchor=BOTTOM,
+                )
+                - cuboid(
+                    [self.hole_size.x + 2, self.hole_size.y + 2, LAYER_THICKNESS + 0.5],
+                    anchor=BOTTOM,
+                )
             )
-            - cuboid(
-                [self.hole_size.x + 2, self.hole_size.y + 2, LAYER_THICKNESS + 0.5],
-                anchor=BOTTOM,
-            )
-        ).translate([self.center_point.x, self.center_point.y, LAYER_THICKNESS])
+            .rotate(self.angle_rotation)
+            .translate([self.center_point.x, self.center_point.y, LAYER_THICKNESS])
+        )
 
-    def _draw_base_pcb(self) -> OpenSCADObject | None:
+    def _draw_pcb_part(self) -> OpenSCADObject | None:
         if os.path.isfile(self.openscad_file_path):
             return import_stl("../" + self.openscad_file_path)
         else:
@@ -60,6 +64,7 @@ class Key(Part):
 
 
 class CherryMxKey(Key):
+    name: str = "cherrymx"
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 
@@ -68,14 +73,15 @@ class CherryMxKey(Key):
 
     openscad_file_path = "./stl/KeyHotswap.stl"
 
-    def _draw_base_pcb(self) -> OpenSCADObject:
+    def _draw_pcb_part(self) -> OpenSCADObject:
         key = (
-            super()._draw_base_pcb().up(0.56)
+            super()._draw_pcb_part().up(0.56)
         )  # The 0.12 is the height of the STL object in fusion
         return key
 
 
 class KailhChocKey(Key):
+    name: str = "kailhchoc"
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 
