@@ -7,7 +7,7 @@ from keyboardgenerator.keyboard import Keyboard
 
 
 def main():
-    keyboard_json = get_first_keyboard_print()
+    keyboard_json = get_arcade_print()
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)

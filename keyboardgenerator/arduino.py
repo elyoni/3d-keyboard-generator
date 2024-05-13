@@ -37,7 +37,7 @@ class Arduino(Part):
         pins_socket_obj = pins_socket_obj.translateY(-12.7)  # TODO, need to reduce it
         return pins_socket_obj
 
-    def draw_bottom_part_addition_sub(self) -> OpenSCADObject:
+    def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         print("draw_bottom_part_addition_sub")
         return cuboid(self.arduino_header, anchor=BOTTOM).translate(
             self.center_point.x,
@@ -45,7 +45,7 @@ class Arduino(Part):
             -self.arduino_header[Z] + LAYER_THICKNESS / 2,
         )
 
-    def draw(self) -> OpenSCADObject:
+    def _draw_base_pcb(self) -> OpenSCADObject | None:
         baseLayer: OpenSCADObject = cube(self.pcb_size, anchor=BOTTOM)
         pins_socket_obj: OpenSCADObject = self._draw_pings()
 
@@ -55,5 +55,12 @@ class Arduino(Part):
             - pins_socket_obj.translateX(self.pins_row_space / 2)
         )
 
-    def get_openscad_obj(self) -> OpenSCADObject:
-        return self.draw()
+    def draw_pcb_part(self) -> OpenSCADObject | None:
+        return (
+            self._draw_base_pcb()
+            .rotate(self.angle_rotation)
+            .translate(self.center_point.x, self.center_point.y, 0)
+        )
+
+    def _draw_plate_footprint(self) -> OpenSCADObject | None:
+        return cube([self.footprint_plate.x, self.footprint_plate.y, 5], center=True)

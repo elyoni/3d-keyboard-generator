@@ -5,7 +5,8 @@ import numpy as np
 from solid2.extensions.bosl2 import cube
 
 from solid2.core.object_base import OpenSCADObject
-from solid2 import union
+
+# from solid2 import union
 
 X = 0
 Y = 1
@@ -184,9 +185,10 @@ class Part:
             center_rotation, angle_rotation
         )
 
-    def get_openscad_obj(self) -> OpenSCADObject:
+    def _draw_base_pcb(self) -> OpenSCADObject:
         raise NotImplementedError(
-            "This function must be implemented, for the part ", type(self)
+            'This function "_draw_base_pcb" must be implemented, for the part ',
+            type(self),
         )
 
     # Add border add constant length to every size of the part and rotate it if needed
@@ -199,10 +201,10 @@ class Part:
             self.corners.rotate(self.center_point, self.angle_rotation)
         return self
 
-    def draw_pcb_footprint(self) -> OpenSCADObject:
+    def draw_pcb_footprint(self) -> OpenSCADObject | None:
         if self.footprint_pcb == XY(0, 0):
             # No footprint
-            return union()
+            return None
 
         return (
             cube([self.footprint_pcb.x, self.footprint_pcb.y, 5], center=True)
@@ -211,39 +213,39 @@ class Part:
         )
 
     # # Return the part on the PCB layer as a openscad object
-    def draw_pcb_part(self) -> OpenSCADObject:
+    def draw_pcb_part(self) -> OpenSCADObject | None:
         return (
-            self.get_openscad_obj()
+            self._draw_base_pcb()
             .rotate(self.angle_rotation)
             .translate(self.center_point.x, self.center_point.y, 0)
         )
 
-    def draw_pcb_part_addition_sub(self) -> OpenSCADObject:
-        return union()
+    def draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_pcb_part_addition_add(self) -> OpenSCADObject:
-        return union()
+    def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_bottom_part_addition_sub(self) -> OpenSCADObject:
-        return union()
+    def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_bottom_part_addition_add(self) -> OpenSCADObject:
-        return union()
+    def draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_plate_footprint(self) -> OpenSCADObject:
+    def draw_plate_footprint(self) -> OpenSCADObject | None:
         if self.footprint_plate == XY(0, 0):
-            return union()
+            return None
         return (
-            cube([self.footprint_plate.x, self.footprint_plate.y, 5], center=True)
+            self._draw_plate_footprint()
             .rotate(self.angle_rotation)
             .translate(self.center_point.x, self.center_point.y, 0)
         )
 
-    def draw_plate_part(self) -> OpenSCADObject:
-        return union()
+    def draw_plate_part(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_plate_part_addition_sub(self) -> OpenSCADObject:
-        return union()
+    def draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
+        return None
 
-    def draw_plate_part_addition_add(self) -> OpenSCADObject:
-        return union()
+    def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
+        return None

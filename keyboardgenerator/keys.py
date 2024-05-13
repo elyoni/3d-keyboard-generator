@@ -16,36 +16,28 @@ class Key(Part):
     openscad_file_path: str
 
     # Create the holes for the key socket
-    def draw_pcb_footprint(self) -> OpenSCADObject:
+    def draw_pcb_footprint(self) -> OpenSCADObject | None:
         return (
             cube([self.size.x, self.size.y, 5], center=True)
             .rotate(self.angle_rotation)
             .translate([self.center_point.x, self.center_point.y, 0])
         )
 
-    # Create the holes for the key
-    def draw_plate_footprint(self) -> OpenSCADObject:
-        return (
-            (
-                cuboid(
-                    [self.hole_size.x, self.hole_size.y, 5], anchor=BOTTOM
-                )  # Hole for the key
-                + cuboid(
-                    [
-                        self.hole_size.x + 3,
-                        self.hole_size.y + 3,
-                        LAYER_THICKNESS + 0.1,
-                    ],
-                    anchor=BOTTOM,
-                ).up(
-                    LAYER_THICKNESS / 2
-                )  #
-            )
-            .rotate(self.angle_rotation)
-            .translate([self.center_point.x, self.center_point.y, -0.1])
-        )
+    def _draw_plate_footprint(self) -> OpenSCADObject | None:
+        return cuboid(
+            [self.footprint_pcb.x, self.footprint_pcb.y, 5], anchor=BOTTOM
+        ) + cuboid(  # Hole for the key
+            [
+                self.footprint_pcb.x + 3,
+                self.footprint_pcb.y + 3,
+                LAYER_THICKNESS + 0.1,
+            ],
+            anchor=BOTTOM,
+        ).up(
+            LAYER_THICKNESS / 2
+        )  #
 
-    def draw_plate_part_addition_add(self) -> OpenSCADObject:
+    def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         # Create square with a hole in the middle to add more strength to the plate
         return (
             cuboid(
@@ -58,9 +50,9 @@ class Key(Part):
             )
         ).translate([self.center_point.x, self.center_point.y, LAYER_THICKNESS])
 
-    def get_openscad_obj(self) -> OpenSCADObject:
+    def _draw_base_pcb(self) -> OpenSCADObject | None:
         if os.path.isfile(self.openscad_file_path):
-            return import_stl(self.openscad_file_path)
+            return import_stl("../" + self.openscad_file_path)
         else:
             raise FileNotFoundError(
                 f"File {self.openscad_file_path} does not exist. Please check the file path."
@@ -74,11 +66,11 @@ class CherryMxKey(Key):
     footprint_plate: XY = spacing
     footprint_pcb: XY = hole_size
 
-    openscad_file_path = "stl/KeyHotswap.stl"
+    openscad_file_path = "./stl/KeyHotswap.stl"
 
-    def get_openscad_obj(self) -> OpenSCADObject:
+    def _draw_base_pcb(self) -> OpenSCADObject:
         key = (
-            super().get_openscad_obj().up(0.56)
+            super()._draw_base_pcb().up(0.56)
         )  # The 0.12 is the height of the STL object in fusion
         return key
 

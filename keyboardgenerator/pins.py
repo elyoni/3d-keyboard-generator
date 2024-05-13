@@ -53,8 +53,11 @@ class Pin(Part):
         LAYER_THICKNESS - LAYER_THICKNESS / 3
     )
 
-    def get_openscad_obj(self) -> OpenSCADObject:
+    def _draw_base_pcb(self) -> OpenSCADObject:
         return self.base_cube_fill + self.cylihder_outter - self.cylihder_inner
+
+    def _draw_plate_footprint(self) -> OpenSCADObject:
+        return self.cylihder_outter
 
 
 class PinPlate(Pin):
@@ -68,7 +71,7 @@ class PinPlate(Pin):
 
     def draw_plate_part(self) -> OpenSCADObject:
         return (
-            self.get_openscad_obj()
+            self._draw_base_pcb()
             .rotate(self.angle_rotation)
             .translate([self.center_point.x, self.center_point.y, 0])
         )
@@ -78,28 +81,17 @@ class PinPlate(Pin):
             [self.center_point.x, self.center_point.y, 0]
         )
 
-    # + self.scraws_chamfer
-    # return (
-    # self.cylihder_inner.rotate(self.angle_rotation) + self.scraws_chamfer
-    # ).translate([self.center_point.x, self.center_point.y, 0])
-
 
 class PinPcb(Pin):
-    # Should be bottom palte
-    # def draw_plate_footprint(self) -> OpenSCADObject:
-    # return self.cylihder_inner.rotate(self.angle_rotation).translate(
-    # [self.center_point.x, self.center_point.y, 0]
-    # )
-
     def draw_plate_footprint(self) -> OpenSCADObject:
-        return union()
+        return None
 
     def draw_plate_part(self) -> OpenSCADObject:
-        return union()
+        return None
 
     def draw_pcb_part(self) -> OpenSCADObject:
         return (
-            self.get_openscad_obj()
+            self._draw_base_pcb()
             .rotate(self.angle_rotation)
             .translate([self.center_point.x, self.center_point.y, 0])
         )
@@ -113,12 +105,3 @@ class PinPcb(Pin):
         return (self.scraws_chamfer + self.cylihder_inner).translate(
             [self.center_point.x, self.center_point.y, 0]
         )
-        # return (
-        # self.cylihder_inner.rotate(self.angle_rotation) + self.scraws_chamfer
-        # ).translate([self.center_point.x, self.center_point.y, 0])
-
-    # Should be bottom palte
-    # def draw__part_addition_sub(self) -> OpenSCADObject:
-    # return self.cylihder_inner.rotate(self.angle_rotation).translate(
-    # [self.center_point.x, self.center_point.y, 0]
-    # )

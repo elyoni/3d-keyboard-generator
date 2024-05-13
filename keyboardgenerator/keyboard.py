@@ -179,10 +179,21 @@ class Keyboard:
         part_addition_add = union()
 
         for part in self.parts_list:
-            footprint_objs += part.draw_plate_footprint()
-            part_objs += part.draw_plate_part()
-            part_addition_sub += part.draw_plate_part_addition_sub()
-            part_addition_add += part.draw_plate_part_addition_add()
+            draw_plate_footprint = part.draw_plate_footprint()
+            if draw_plate_footprint is not None:
+                footprint_objs += draw_plate_footprint
+
+            draw_plate_part = part.draw_plate_part()
+            if draw_plate_part is not None:
+                part_objs += draw_plate_part
+
+            draw_plate_part_addition_sub = part.draw_plate_part_addition_sub()
+            if draw_plate_part_addition_sub is not None:
+                part_addition_sub += draw_plate_part_addition_sub
+
+            draw_plate_part_addition_add = part.draw_plate_part_addition_add()
+            if draw_plate_part_addition_add is not None:
+                part_addition_add += draw_plate_part_addition_add
         return (
             self._draw_base_plate(add_label=ADD_LABEL)
             - footprint_objs
@@ -203,10 +214,21 @@ class Keyboard:
         part_addition_add = []
 
         for part in self.parts_list:
-            footprint_objs += part.draw_pcb_footprint()
-            part_objs += part.draw_pcb_part()
-            part_addition_sub += part.draw_pcb_part_addition_sub()
-            part_addition_add += part.draw_pcb_part_addition_add()
+            draw_pcb_footprint = part.draw_pcb_footprint()
+            if draw_pcb_footprint is not None:
+                footprint_objs += draw_pcb_footprint
+
+            draw_pcb_part = part.draw_pcb_part()
+            if draw_pcb_part is not None:
+                part_objs += draw_pcb_part
+
+            draw_pcb_part_addition_sub = part.draw_pcb_part_addition_sub()
+            if draw_pcb_part_addition_sub is not None:
+                part_addition_sub += draw_pcb_part_addition_sub
+
+            draw_pcb_part_addition_add = part.draw_pcb_part_addition_add()
+            if draw_pcb_part_addition_add is not None:
+                part_addition_add += draw_pcb_part_addition_add
 
         # return part_objs
         return (
@@ -221,8 +243,13 @@ class Keyboard:
         bottom_objs = self._draw_base_plate(add_label=ADD_LABEL)
 
         for part in self.parts_list:
-            bottom_objs -= part.draw_bottom_part_addition_sub()
-            bottom_objs += part.draw_bottom_part_addition_add()
+            draw_bottom_part_addition_sub = part.draw_bottom_part_addition_sub()
+            if draw_bottom_part_addition_sub is not None:
+                bottom_objs -= draw_bottom_part_addition_sub
+
+            draw_bottom_part_addition_add = part.draw_bottom_part_addition_add()
+            if draw_bottom_part_addition_add is not None:
+                bottom_objs += draw_bottom_part_addition_add
 
         return bottom_objs
 
