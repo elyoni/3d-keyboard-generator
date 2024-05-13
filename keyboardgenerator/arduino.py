@@ -27,8 +27,6 @@ class Arduino(Part):
     holder_pole_size: tuple[float, float, float] = (3, 3, 4)  # [mm,mm,mm]
     holder_tooth_size: tuple[float, float, float] = (3, 3.5, 1)  # [mm,mm,mm]
 
-    # openscad_file_path = "keyboardgenerator/KeySocket.stl"
-
     # Draw the pins for the arduino header
     def _draw_pings(self) -> OpenSCADObject:
         pins_socket_obj: OpenSCADObject = union()
@@ -39,23 +37,6 @@ class Arduino(Part):
         pins_socket_obj = pins_socket_obj.translateY(-12.7)  # TODO, need to reduce it
         return pins_socket_obj
 
-        # cuboid(self.holder_pole_size, anchor=BOTTOM)
-
-    # def _draw_holder_pole(self) -> OpenSCADObject:
-    #     return union()
-    #     return (
-    #         cube(self.holder_pole_size, center=True)
-    #         + cube(self.holder_tooth_size, center=True)
-    #         .down(self.holder_pole_size[Z] / 2)
-    #         .back((self.holder_tooth_size[Y] - self.holder_pole_size[Y]) / 2)
-    #     ).down(self.holder_pole_size[Z] / 2 + self.pcb_size[Z] / 2 - self.pcb_size[Z])
-
-    # def _draw_holder_pin(self) -> OpenSCADObject:
-    #     return union()
-    #     return cylinder(d=1, h=3, center=True).down(
-    #         self.holder_pole_size[Z] / 2 + self.pcb_size[Z] / 2 - 1
-    #     )
-
     def draw_bottom_part_addition_sub(self) -> OpenSCADObject:
         print("draw_bottom_part_addition_sub")
         return cuboid(self.arduino_header, anchor=BOTTOM).translate(
@@ -63,13 +44,6 @@ class Arduino(Part):
             self.center_point.y - self.size.y / 2 + self.arduino_header[Y] / 2,
             -self.arduino_header[Z] + LAYER_THICKNESS / 2,
         )
-        # return cube(self.arduino_header, center=True).translate(
-        # [
-        # self.center_point.x,
-        # self.center_point.y - self.spacing.y / 2 + self.arduino_header[Y] / 2,
-        # -1,
-        # ]
-        # )
 
     def draw(self) -> OpenSCADObject:
         baseLayer: OpenSCADObject = cube(self.pcb_size, anchor=BOTTOM)
