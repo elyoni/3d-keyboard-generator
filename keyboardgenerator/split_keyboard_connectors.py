@@ -1,6 +1,6 @@
 from solid2.core.object_base import OpenSCADObject
 from keyboardgenerator.base import Part, XY
-from solid2.extensions.bosl2 import cube
+from solid2.extensions.bosl2 import cube, BOTTOM, cylinder
 
 
 class SplitKeyboardConnector(Part):
@@ -44,3 +44,23 @@ class SplitKeyboardConnector(Part):
 
     def draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
         return None
+
+
+class TRRSJack(SplitKeyboardConnector):
+    name: str = "trrs"
+    size: XY = XY(8, 14.2)
+
+    socket_size: XY = XY(6, 12.2)
+    footprint_plate: XY = XY(0, 0)
+    footprint_pcb: XY = size
+
+    def _draw_pcb_part(self) -> OpenSCADObject:
+        pj_320a_connector = cube(
+            [self.socket_size.x, self.socket_size.y, 5], anchor=BOTTOM
+        ).up(2) + cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90).translate(
+            [0, -self.socket_size.x / 2 / 2, 2 + self.socket_size.y / 2]
+        )
+        return (
+            cube([self.size.x, self.size.y, 6], anchor=BOTTOM)
+            - pj_320a_connector.debug()
+        )

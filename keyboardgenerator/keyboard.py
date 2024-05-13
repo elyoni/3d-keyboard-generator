@@ -17,7 +17,7 @@ from keyboardgenerator.base import XY, Part, LAYER_THICKNESS
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
-from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector
+from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
 
 
 ADD_LABEL = False
@@ -47,6 +47,8 @@ def get_part_obj(part_type: str, part_profile: str | None = None):
         return KailhChocKey
     elif part_profile == SplitKeyboardConnector.name:
         return SplitKeyboardConnector
+    elif part_profile == TRRSJack.name:
+        return TRRSJack
     elif part_profile == CherryMxKey.name:
         # print("Part type is cherry")
         return CherryMxKey
