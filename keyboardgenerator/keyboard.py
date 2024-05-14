@@ -13,47 +13,46 @@ import pykle_serial as kle_serial
 import numpy as np
 from scipy.spatial import ConvexHull
 
+import logging
+
+
 from keyboardgenerator.base import XY, Part, LAYER_THICKNESS
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
+from keyboardgenerator.constants import PART_LABEL_INDEX, PROFILE_LABEL_INDEX
 
+log = logging.getLogger(__name__)
 
 ADD_LABEL = False
 
 
-def get_part_obj(part_type: str, part_profile: str | None = None):
-    print(
-        "part_type",
-        part_type,
-        "part_profile",
-        part_profile,
-        SplitKeyboardConnector.name,
-    )
-    if part_profile == Arduino.name:
+def get_part_obj(part_type: str):
+    if part_type == Arduino.name:
         return Arduino
-    elif part_profile == Pin.name:
+    elif part_type == Pin.name:
         # print("Part type is Pin")
         return Pin
-    elif part_profile == PinPlate.name:
+    elif part_type == PinPlate.name:
         # print("Part type is PlatePin")
         return PinPlate
-    elif part_profile == PinPcb.name:
+    elif part_type == PinPcb.name:
         # print("Part type is PcbPin")
         return PinPcb
-    elif part_profile == KailhChocKey.name:
+    elif part_type == KailhChocKey.name:
         # print("Part type is kailh")
         return KailhChocKey
-    elif part_profile == SplitKeyboardConnector.name:
+    elif part_type == SplitKeyboardConnector.name:
         return SplitKeyboardConnector
-    elif part_profile == TRRSJack.name:
+    elif part_type == TRRSJack.name:
         return TRRSJack
-    elif part_profile == CherryMxKey.name:
+    elif part_type == CherryMxKey.name:
         # print("Part type is cherry")
         return CherryMxKey
     # ---> Add HEAR A NEW PART <---
     elif part_type == "":
+        log.debug("Part type is empty, using CherryMxKey as default")
         return CherryMxKey
     else:
         raise ValueError(
@@ -86,6 +85,21 @@ class Keyboard:
     # return cls(part_list)
 
     @classmethod
+    def _get_part_type(cls, part) -> str:
+        if part.sm != "":
+            return part.sm
+        elif part.labels[PROFILE_LABEL_INDEX] is not None:
+            return part.labels[PROFILE_LABEL_INDEX].lower()
+        elif part.labels[0] is not None:
+            log.debug(f"Part type found, {part.labels[0].lower()}")
+            return part.labels[0].lower()
+        elif part.labels[PART_LABEL_INDEX] is not None:
+            return part.labels[PART_LABEL_INDEX].lower()
+        else:
+            log.debug(f"No part type found, {part.labels}")
+            return ""
+
+    @classmethod
     def get_keyboard_spacing(cls, switch_type: str) -> XY:
         switch_type = switch_type.lower()
         if switch_type == "cherrymx" or switch_type == "":
@@ -110,14 +124,7 @@ class Keyboard:
 
         part_list = []
         for part in kle_obj.keys:
-            lable = (
-                None
-                if part.labels[cls.profile_label_index] is None
-                else part.labels[cls.profile_label_index].lower()
-            )
-            # print("labeels", part.labels, "lable", lable)
-
-            part_obj = get_part_obj(part.sm, lable)
+            part_obj = get_part_obj(cls._get_part_type(part))
 
             position = XY(part.x, part.y) * key_size_scale
             center_rotation = XY(part.rotation_x, part.rotation_y) * key_size_scale

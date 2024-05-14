@@ -55,11 +55,13 @@ class TRRSJack(SplitKeyboardConnector):
     footprint_pcb: XY = size
 
     def _draw_pcb_part(self) -> OpenSCADObject:
-        pj_320a_connector = cube(
-            [self.socket_size.x, self.socket_size.y, 5], anchor=BOTTOM
-        ).up(2) + cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90).translate(
-            [0, -self.socket_size.x / 2 / 2, 2 + self.socket_size.y / 2]
+        port = cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90)
+        pj_320a_connector = (
+            cube([self.socket_size.x, self.socket_size.y, 5], anchor=BOTTOM).up(2)
+            + port
         )
+
+        # cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90).translate( [0, -self.socket_size.x / 2 / 2, 2 + self.socket_size.y / 2])
         return (
             cube([self.size.x, self.size.y, 6], anchor=BOTTOM)
             - pj_320a_connector.debug()

@@ -1,14 +1,18 @@
 import pykle_serial as kle_serial
 import os
+from keyboardgenerator.keyboard import Keyboard
+import logging as log
 
+log.basicConfig(level=log.DEBUG)
+log.info("Creating new keyboard")
 
 # from keyboardgenerator.base import Keyboard
-from keyboardgenerator.keyboard import Keyboard
 
 
 #
 def main():
-    keyboard_json = get_arcade_print()
+    log.info("Creating new keyboard")
+    keyboard_json = get_split_connector()
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
@@ -34,7 +38,7 @@ def main():
     (pcb.color("gray") + plate.down(40) + bottom.up(40).color("aqua")).save_as_scad(
         os.path.join("output", "keyboard.scad")
     )
-    print("Created new scad files")
+    log.info("Created new scad files")
 
     print("\tPcb scad file", os.path.abspath(os.path.join("output", "pcb.scad")))
     print("\tPlate scad file", os.path.abspath(os.path.join("output", "plate.scad")))
@@ -262,6 +266,16 @@ def get_json_const_05() -> kle_serial.Keyboard:
 
     ]"""
     )
+    return keyboard
+
+
+def get_split_connector() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+    [{y:-0.5},"trrs"]
+    ]"""
+    )
+
     return keyboard
 
 
