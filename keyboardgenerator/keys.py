@@ -72,7 +72,7 @@ class Key(Part):
 
 
 class CherryMxKey(Key):
-    name: str = "cherrymx"
+    name: str = "cherry"
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 

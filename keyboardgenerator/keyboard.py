@@ -60,13 +60,13 @@ def get_part_obj(part_type: str):
         return CherryMxKey
     # ---> Add HEAR A NEW PART <---
     elif part_type == "":
-        log.debug("Part type is empty, using CherryMxKey as default")
+        # log.debug("Part type is empty, using CherryMxKey as default")
         return CherryMxKey
     else:
         raise ValueError(
             "Don't know what type of spacing you are using,"
             "add the information in the json file"
-            "Look at the readme file for more information"
+            "Look at the readme file for more information. part_type:" + part_type
         )
 
 
@@ -104,7 +104,7 @@ class Keyboard:
         elif part.labels[PART_OLD_LABEL_INDEX] is not None:
             return part.labels[PART_OLD_LABEL_INDEX].lower()
         else:
-            log.debug(f"No part type found, {part.labels}")
+            # log.debug(f"No part type found, {part.labels}")
             return ""
 
     @classmethod
@@ -133,6 +133,7 @@ class Keyboard:
         part_list = []
         for part in kle_obj.keys:
             part_obj = get_part_obj(cls._get_part_type(part))
+            log.debug(f"Part type: {part_obj.name}")
 
             position = XY(part.x, part.y) * key_size_scale
             center_rotation = XY(part.rotation_x, part.rotation_y) * key_size_scale
@@ -160,7 +161,7 @@ class Keyboard:
     def create_point_sphere(self, point):
         return sphere(d=1).color("blue").translate(point.x, point.y, -2)
 
-    def _draw_base_plate(self, border=0, add_label=ADD_LABEL) -> OpenSCADObject:
+    def _draw_base_plate(self, border=2, add_label=ADD_LABEL) -> OpenSCADObject:
         if add_label:
             move_label = XY(5, 3)
         polygonObj = []

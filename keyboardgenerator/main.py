@@ -12,11 +12,14 @@ log.info("Creating new keyboard")
 #
 def main():
     log.info("Creating new keyboard")
-    keyboard_json = get_minimal_keyboard()
+    keyboard_json = one_board_tez_v4()
+    log.info("Generate Keyboard Plate")
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
+    log.info("Generate Keyboard PCB")
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
+    log.info("Generate Keyboard Bottom")
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
-
+    log.info("Done creating keyboard")
     pcb = keyboard_pcb.draw_pcb()
     plate = keyboard_plate.draw_plate()
     bottom = keyboard_bottom.draw_bottom()
@@ -92,9 +95,7 @@ def get_json_const_ergodox_arduino() -> kle_serial.Keyboard:
 [{y:-0.875,x:2.5},"@\\n2",{x:1},"$\\n4",{x:8.5},"&\\n7",{x:1},"(\\n9"],
 [{y:-0.875,x:5.5},"%\\n5","LS0",{x:0.25,a:7,w:1.5,h:2.75},"\\n\\n\\n\\nArduino",{x:2.75,a:4},"RS0","^\\n6"],
 [{y:-0.875,a:7,w:1.5},"",{a:4},"!\\n1",{x:14.5},")\\n0",{a:7,w:1.5},""],
-[{y:-0.495,x:10.25,w:1.5,h:2.75},"\\n\\n\\n\\nArduino"],
-[{y:-0.88,x:3.5,a:4},"E",{x:10.5},"I"],
-[{y:-0.875,x:2.5},"W",{x:1},"R",{x:8.5},"U",{x:1},"O"],
+[{y:-0.495,x:10.25,w:1.5,h:2.75},"\\n\\n\\n\\nArduino"], [{y:-0.88,x:3.5,a:4},"E",{x:10.5},"I"], [{y:-0.875,x:2.5},"W",{x:1},"R",{x:8.5},"U",{x:1},"O"],
 [{y:-0.875,x:5.5},"T",{h:1.5},"LS1",{x:4.5,h:1.5},"RS1","Y"],
 [{y:-0.875,a:7,w:1.5},"",{a:4},"Q",{x:14.5},"P",{a:7,w:1.5},""],
 [{y:-0.375,x:3.5,a:4},"D",{x:10.5},"K"],
@@ -328,19 +329,21 @@ def get_arcade_print() -> kle_serial.Keyboard:
 def get_minimal_keyboard() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
-[{y:0.25,x:2,c:"#ff0000",a:7,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.5,c:"#cccccc"},""],
-[{y:-0.75,x:1},"",{x:1},"",{c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.5,c:"#cccccc"},""],
-[{y:-0.75},"",{x:-1,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:4.5,c:"#cccccc"},"\\n\\n\\n\\nArduino"],
-[{y:-0.5,x:2},""],
-[{y:-0.75,x:1},"",{x:1},"",""],
-[{y:-0.75},""],
-[{y:-0.5,x:2},""],
-[{y:-0.75,x:1},"",{x:1},"",""],
-[{y:-0.75},"",{x:1,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
-[{y:-0.75,x:4,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
-[{y:-0.75,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
-[{y:-0.75,x:3,c:"#cccccc"},""],
-[{r:15,y:-2.25,x:5},"",""],
+[{y:0.25,x:2.125,c:"#ff0000",a:7,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.375,c:"#cccccc"},""],
+[{y:-0.75,x:1.25},"",{x:1},"","","\\n\\n\\n\\nArduino"],
+[{y:-0.75,x:0.125,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.375,c:"#cccccc"},""],
+[{y:-0.5,x:2.25},""],
+[{y:-0.85,x:4.15,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
+[{y:-0.9,x:1.25,c:"#cccccc"},"",{x:1},"",""],
+[{y:-0.75,x:0.25},""],
+[{y:-0.5,x:2.125,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.375,c:"#cccccc"},""],
+[{y:-0.75,x:1.25},"",{x:1},"",""],
+[{y:-0.75,x:0.25},"",{x:4.25,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
+[{y:-0.5,x:0.125,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
+[{y:-0.75,x:3.25,c:"#cccccc"},"",{x:-0.12,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
+[{y:-0.8,x:5.75,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
+[{r:15,y:-2.45,x:5.25,c:"#cccccc"},""],
+[{y:-0.95,x:6.25},""],
 [{r:90,rx:5.5,ry:2.5,y:-0.75,x:0.75,w:0.5},"\\n\\n\\n\\ntrrs"]
     ]"""
     )
@@ -371,42 +374,30 @@ def one_board_ergo() -> kle_serial.Keyboard:
     return keyboard
 
 
-def one_board_ergo_v2() -> kle_serial.Keyboard:
+def one_board_tez_v4() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
-[{x:2},"E",{x:4.25},"I"],
-[{y:-0.87,x:1},"W",{x:1},"R",{x:2.25},"U",{x:1},"O"],
-[{y:-0.88,x:4},"T",{x:0.25},"Y"],
-[{y:-0.87},"Q",{x:8.25},"P"],
-[{y:-0.38,x:2},"D",{x:4.25},"K"],
-[{y:-0.87,x:1},"S",{x:1},"F",{x:2.25},"J",{x:1},"L"],
-[{y:-0.88,x:4},"G",{x:0.25},"H"],
-[{y:-0.87},"A",{x:8.25},":\\n;"],
-[{y:-0.38,x:2},"C",{x:4.25},"<\\n,"],
-[{y:-0.87,x:1},"X",{x:1},"V",{x:2.25},"M",{x:1},">\\n."],
-[{y:-0.88,x:4},"B",{x:0.25},"N"],
-[{y:-0.87},"Z",{x:8.25},"?\\n/"]
-]"""
-    )
-    return keyboard
-
-
-def one_board_ergo_v3() -> kle_serial.Keyboard:
-    keyboard = kle_serial.parse(
-        """[
-[{x:2},"E",{x:4.25},"I"],
-[{y:-0.87,x:1},"W",{x:1},"R",{x:2.25},"U",{x:1},"O"],
-[{y:-0.88,x:4},"T",{x:0.25},"Y"],
-[{y:-0.87},"Q",{x:8.25},"P"],
-[{y:-0.38,x:2},"D",{x:4.25},"K"],
-[{y:-0.87,x:1},"S",{x:1},"F",{x:2.25},"J",{x:1},"L"],
-[{y:-0.88,x:4},"G",{x:0.25},"H"],
-[{y:-0.87},"A",{x:8.25},":\\n;"],
-[{y:-0.38,x:2},"C",{x:4.25},"<\\n,"],
-[{y:-0.87,x:1},"X",{x:1},"V",{x:2.25},"M",{x:1},">\\n."],
-[{y:-0.88,x:4},"B",{x:0.25},"N"],
-[{y:-0.87},"Z",{x:8.25},"?\\n/"],
-[{x:3.1,a:7},"","","",""]
+[{x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:-0.4,sm:"cherry"},"E"],
+[{y:-0.87,x:1},"W",{x:1},"R",{x:-0.1,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.9,w:0.5,h:0.5},"PPlate"],
+[{y:-0.98,x:4,sm:"cherry"},"T",{x:0.2,sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.87,sm:"cherry",a:4},"Q"],
+[{y:-0.38,x:2},"D"],
+[{y:-0.87,x:1},"S",{x:1},"F"],
+[{y:-0.98,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.9,x:4,sm:"cherry"},"G"],
+[{y:-0.87},"A"],
+[{y:-0.95,x:3.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.43,x:2,sm:"cherry"},"C"],
+[{y:-0.87,x:1},"X",{x:1},"V"],
+[{y:-0.88,x:4},"B"],
+[{y:-0.87},"Z"],
+[{y:-0.5,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.73,x:3.9,w:0.5,h:0.5},"PPlate"],
+[{y:-0.87,w:0.5,h:0.5},"PPlate"],
+[{r:30,rx:5,ry:3.25,y:0.5,x:-1,sm:"cherry",a:7},"","",""],
+[{y:-0.8,x:-0.1,sm:"pinplate",a:4,w:0.5,h:0.5},"PPlate",{x:0.5,w:0.5,h:0.5},"PPlate"],
+[{r:90,rx:5.25,ry:1.2,y:-1.2,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
 ]"""
     )
     return keyboard

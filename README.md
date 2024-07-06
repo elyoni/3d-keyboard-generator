@@ -10,3 +10,7 @@ To configure the json file of your keyboard you need to provide the key type of 
 `
 
 When you add a new part make sure to add the key type to the get_part_obj
+
+
+== Pins
+Plate pins on top of a key can be in 0.15 units on top of a key

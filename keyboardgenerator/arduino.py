@@ -12,7 +12,7 @@ from keyboardgenerator.base import (
 
 class Arduino(Part):
     name: str = "arduino"
-    size = XY(19, 37)  # Size
+    size = XY(19, 37)  # Size in mm
     footprint_plate: XY | None = None  # XY(0, 0)
     footprint_pcb: XY = size
 
