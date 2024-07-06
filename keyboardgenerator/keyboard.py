@@ -16,12 +16,20 @@ from scipy.spatial import ConvexHull
 import logging
 
 
-from keyboardgenerator.base import XY, Part, LAYER_THICKNESS
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+from keyboardgenerator.base import XY, Part
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
-from keyboardgenerator.constants import PART_LABEL_INDEX, PROFILE_LABEL_INDEX
+from keyboardgenerator.constants import (
+    PART_LABEL_INDEX,
+    PROFILE_LABEL_INDEX,
+    BASE_PLATE_WIDTH,
+    KEY_LABEL_THINKNESS,
+    PART_OLD_LABEL_INDEX,
+    LABEL_TRANSLATE_LOCATION,
+)
 
 log = logging.getLogger(__name__)
 
@@ -65,9 +73,7 @@ def get_part_obj(part_type: str):
 class Keyboard:
     parts_list: list[Part | Key | Arduino]
     # profile_label_index: int = 10
-    profile_label_index: int = 4
     plate_border: int
-    part_label_index: int = 1
 
     def __init__(
         self, part_list: list[Part | Key | Arduino], plate_border: int
@@ -90,11 +96,13 @@ class Keyboard:
             return part.sm
         elif part.labels[PROFILE_LABEL_INDEX] is not None:
             return part.labels[PROFILE_LABEL_INDEX].lower()
-        elif part.labels[0] is not None:
-            log.debug(f"Part type found, {part.labels[0].lower()}")
-            return part.labels[0].lower()
+        # elif part.labels[0] is not None:
+        #     log.debug(f"Part type found, {part.labels[0].lower()}")
+        #     return part.labels[0].lower()
         elif part.labels[PART_LABEL_INDEX] is not None:
             return part.labels[PART_LABEL_INDEX].lower()
+        elif part.labels[PART_OLD_LABEL_INDEX] is not None:
+            return part.labels[PART_OLD_LABEL_INDEX].lower()
         else:
             log.debug(f"No part type found, {part.labels}")
             return ""
@@ -135,7 +143,7 @@ class Keyboard:
             else:
                 size = None
 
-            label = part.labels[cls.part_label_index]
+            label = part.labels[PART_LABEL_INDEX]
             part_list.append(
                 part_obj(
                     position,
@@ -155,7 +163,6 @@ class Keyboard:
     def _draw_base_plate(self, border=0, add_label=ADD_LABEL) -> OpenSCADObject:
         if add_label:
             move_label = XY(5, 3)
-            label_thinkness = 3
         polygonObj = []
 
         points_list = []
@@ -167,12 +174,12 @@ class Keyboard:
                         text(part.text, size=4)
                         # .rotate(180)
                         .translate(
-                            part.center_point.x + move_label.x,
-                            part.center_point.y + move_label.y,
-                            3,
+                            part.center_point.x + LABEL_TRANSLATE_LOCATION.x,
+                            part.center_point.y + LABEL_TRANSLATE_LOCATION.y,
+                            BASE_PLATE_WIDTH,
                         )
                         .color("black")
-                        .linear_extrude(label_thinkness)
+                        .linear_extrude(KEY_LABEL_THINKNESS)
                     )
                 points_list.append(corner.get_tuple())
 
@@ -191,7 +198,7 @@ class Keyboard:
         for _x, _y in zip(x, y):
             points.append((_x, _y))
 
-        return polygonObj + polygon(points).linear_extrude(LAYER_THICKNESS)
+        return polygonObj + polygon(points).linear_extrude(BASIC_LAYER_THICKNESS)
 
     def draw_plate(self) -> OpenSCADObject:
         footprint_objs = union()

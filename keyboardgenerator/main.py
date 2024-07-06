@@ -12,7 +12,7 @@ log.info("Creating new keyboard")
 #
 def main():
     log.info("Creating new keyboard")
-    keyboard_json = get_split_connector()
+    keyboard_json = get_minimal_keyboard()
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
@@ -330,9 +330,9 @@ def get_minimal_keyboard() -> kle_serial.Keyboard:
         """[
 [{y:0.25,x:2,c:"#ff0000",a:7,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.5,c:"#cccccc"},""],
 [{y:-0.75,x:1},"",{x:1},"",{c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:-0.5,c:"#cccccc"},""],
-[{y:-0.75},"",{x:-1,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
-[{y:-0.5,x:2,c:"#cccccc"},""],
-[{y:-0.75,x:1},"",{x:1},"","","\\n\\n\\n\\nArduino"],
+[{y:-0.75},"",{x:-1,c:"#ff0000",w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate",{x:4.5,c:"#cccccc"},"\\n\\n\\n\\nArduino"],
+[{y:-0.5,x:2},""],
+[{y:-0.75,x:1},"",{x:1},"",""],
 [{y:-0.75},""],
 [{y:-0.5,x:2},""],
 [{y:-0.75,x:1},"",{x:1},"",""],
@@ -340,11 +340,74 @@ def get_minimal_keyboard() -> kle_serial.Keyboard:
 [{y:-0.75,x:4,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
 [{y:-0.75,w:0.5,h:0.5},"\\n\\n\\n\\nPinPlate"],
 [{y:-0.75,x:3,c:"#cccccc"},""],
-[{r:15,y:-2.25,x:5},"",""]
-
-
-
+[{r:15,y:-2.25,x:5},"",""],
+[{r:90,rx:5.5,ry:2.5,y:-0.75,x:0.75,w:0.5},"\\n\\n\\n\\ntrrs"]
     ]"""
+    )
+    return keyboard
+
+
+def one_board_ergo() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{x:2},"E",{x:7.5},"I"],
+[{y:-0.87,x:1},"W",{x:1},"R",{x:5.5},"U",{x:1},"O"],
+[{y:-0.88,x:4},"T",{x:3.5},"Y"],
+[{y:-0.87},"Q",{x:11.5},"P"],
+[{y:-0.38,x:2},"D",{x:7.5},"K"],
+[{y:-0.87,x:1},"S",{x:1},"F",{x:5.5},"J",{x:1},"L"],
+[{y:-0.88,x:4},"G",{x:3.5},"H"],
+[{y:-0.87},"A",{x:11.5},":\\n;"],
+[{y:-0.38,x:2},"C",{x:7.5},"<\\n,"],
+[{y:-0.87,x:1},"X",{x:1},"V",{x:5.5},"M",{x:1},">\\n."],
+[{y:-0.88,x:4},"B",{x:3.5},"N"],
+[{y:-0.87},"Z",{x:11.5},"?\\n/"],
+[{r:30,rx:5,ry:3.25,a:7,h:1.5},"",{h:1.5},""],
+[{y:-0.5,x:-1},""],
+[{r:-30,rx:8.5,x:-2,h:1.5},"",{h:1.5},""],
+[{y:-0.5},""]
+]"""
+    )
+    return keyboard
+
+
+def one_board_ergo_v2() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{x:2},"E",{x:4.25},"I"],
+[{y:-0.87,x:1},"W",{x:1},"R",{x:2.25},"U",{x:1},"O"],
+[{y:-0.88,x:4},"T",{x:0.25},"Y"],
+[{y:-0.87},"Q",{x:8.25},"P"],
+[{y:-0.38,x:2},"D",{x:4.25},"K"],
+[{y:-0.87,x:1},"S",{x:1},"F",{x:2.25},"J",{x:1},"L"],
+[{y:-0.88,x:4},"G",{x:0.25},"H"],
+[{y:-0.87},"A",{x:8.25},":\\n;"],
+[{y:-0.38,x:2},"C",{x:4.25},"<\\n,"],
+[{y:-0.87,x:1},"X",{x:1},"V",{x:2.25},"M",{x:1},">\\n."],
+[{y:-0.88,x:4},"B",{x:0.25},"N"],
+[{y:-0.87},"Z",{x:8.25},"?\\n/"]
+]"""
+    )
+    return keyboard
+
+
+def one_board_ergo_v3() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{x:2},"E",{x:4.25},"I"],
+[{y:-0.87,x:1},"W",{x:1},"R",{x:2.25},"U",{x:1},"O"],
+[{y:-0.88,x:4},"T",{x:0.25},"Y"],
+[{y:-0.87},"Q",{x:8.25},"P"],
+[{y:-0.38,x:2},"D",{x:4.25},"K"],
+[{y:-0.87,x:1},"S",{x:1},"F",{x:2.25},"J",{x:1},"L"],
+[{y:-0.88,x:4},"G",{x:0.25},"H"],
+[{y:-0.87},"A",{x:8.25},":\\n;"],
+[{y:-0.38,x:2},"C",{x:4.25},"<\\n,"],
+[{y:-0.87,x:1},"X",{x:1},"V",{x:2.25},"M",{x:1},">\\n."],
+[{y:-0.88,x:4},"B",{x:0.25},"N"],
+[{y:-0.87},"Z",{x:8.25},"?\\n/"],
+[{x:3.1,a:7},"","","",""]
+]"""
     )
     return keyboard
 

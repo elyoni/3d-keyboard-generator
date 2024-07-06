@@ -1,6 +1,11 @@
 from solid2.core.object_base import OpenSCADObject
 from keyboardgenerator.base import Part, XY
-from solid2.extensions.bosl2 import cube, BOTTOM, cylinder
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+from solid2.extensions.bosl2 import cube, BOTTOM, cylinder, FWD
+
+# from solid2 import (
+#     union,
+# )
 
 
 class SplitKeyboardConnector(Part):
@@ -47,22 +52,44 @@ class SplitKeyboardConnector(Part):
 
 
 class TRRSJack(SplitKeyboardConnector):
-    name: str = "trrs"
-    size: XY = XY(8, 14.2)
+    socket_hold_size_diameter: float = 5
+    socket_hole_size_height: float = 2.2
 
-    socket_size: XY = XY(6, 12.2)
+    socket_body_size: XY = XY(6, 12.2)
+    name: str = "trrs"
+    size: XY = XY(
+        socket_body_size.x + 2, socket_body_size.y + socket_hole_size_height + 2
+    )
     footprint_plate: XY = XY(0, 0)
     footprint_pcb: XY = size
 
     def _draw_pcb_part(self) -> OpenSCADObject:
-        port = cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90)
-        pj_320a_connector = (
-            cube([self.socket_size.x, self.socket_size.y, 5], anchor=BOTTOM).up(2)
-            + port
+        socket_hole = cylinder(
+            d=self.socket_hold_size_diameter,
+            h=self.socket_hole_size_height,
+            anchor=BOTTOM,
+        ).rotateX(90)
+
+        socket_body = cube(
+            [self.socket_body_size.x, self.socket_body_size.y, 5], anchor=FWD
+        )
+
+        pj_320a_connector = socket_body + socket_hole
+        pj_320a_connector = pj_320a_connector
+        socket_pj_320a_connector = (
+            cube(
+                [self.size.x, self.size.y + self.socket_hole_size_height, 5], anchor=FWD
+            ).translate([0, -self.socket_hole_size_height])
+            - pj_320a_connector
+        )
+        # socket_pj_320a_connectorOrigin = socket_pj_320a_connector
+        socket_pj_320a_connector = socket_pj_320a_connector.translate(
+            [0, -self.socket_body_size.x, BASIC_LAYER_THICKNESS + 5 / 2]
         )
 
         # cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90).translate( [0, -self.socket_size.x / 2 / 2, 2 + self.socket_size.y / 2])
         return (
-            cube([self.size.x, self.size.y, 6], anchor=BOTTOM)
-            - pj_320a_connector.debug()
+            socket_pj_320a_connector
+            # union()
+            # cube([self.size.x, self.size.y, 6], anchor=FWD) - pj_320a_connector.debug()
         )

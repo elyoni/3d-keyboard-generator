@@ -1,12 +1,12 @@
 from solid2.extensions.bosl2 import cube, cuboid, cylinder, union, BOTTOM
 from solid2.core.object_base import OpenSCADObject
 
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import (
     Y,
     Z,
     XY,
     Part,
-    LAYER_THICKNESS,
 )
 
 
@@ -43,7 +43,7 @@ class Arduino(Part):
         return cuboid(self.arduino_header, anchor=BOTTOM).translate(
             self.center_point.x,
             self.center_point.y - self.size.y / 2 + self.arduino_header[Y] / 2,
-            -self.arduino_header[Z] + LAYER_THICKNESS / 2,
+            -self.arduino_header[Z] + BASIC_LAYER_THICKNESS / 2,
         )
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:

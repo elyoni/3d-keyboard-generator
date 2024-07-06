@@ -7,7 +7,9 @@ from solid2.extensions.bosl2 import (
 from solid2.core.object_base import OpenSCADObject
 
 from solid2 import cube, import_stl
-from keyboardgenerator.base import XY, Part, LAYER_THICKNESS
+
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+from keyboardgenerator.base import XY, Part
 
 
 class Key(Part):
@@ -30,11 +32,11 @@ class Key(Part):
             [
                 self.footprint_pcb.x + 3,
                 self.footprint_pcb.y + 3,
-                LAYER_THICKNESS + 0.1,
+                BASIC_LAYER_THICKNESS + 0.1,
             ],
             anchor=BOTTOM,
         ).up(
-            LAYER_THICKNESS / 2
+            BASIC_LAYER_THICKNESS / 2
         )  #
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
@@ -42,16 +44,22 @@ class Key(Part):
         return (
             (
                 cuboid(
-                    [self.hole_size.x + 3, self.hole_size.y + 3, LAYER_THICKNESS],
+                    [self.hole_size.x + 3, self.hole_size.y + 3, BASIC_LAYER_THICKNESS],
                     anchor=BOTTOM,
                 )
                 - cuboid(
-                    [self.hole_size.x + 2, self.hole_size.y + 2, LAYER_THICKNESS + 0.5],
+                    [
+                        self.hole_size.x + 2,
+                        self.hole_size.y + 2,
+                        BASIC_LAYER_THICKNESS + 0.5,
+                    ],
                     anchor=BOTTOM,
                 )
             )
             .rotate(self.angle_rotation)
-            .translate([self.center_point.x, self.center_point.y, LAYER_THICKNESS])
+            .translate(
+                [self.center_point.x, self.center_point.y, BASIC_LAYER_THICKNESS]
+            )
         )
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:

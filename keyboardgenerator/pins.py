@@ -9,10 +9,10 @@ from solid2 import (
     union,
 )
 
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import (
     XY,
     Part,
-    LAYER_THICKNESS,
 )
 
 
@@ -20,7 +20,7 @@ class Pin(Part):
     name: str = "pin"
     draw_delta = 0.5
     hight: float = 5
-    inner_high: float = 5 + LAYER_THICKNESS + draw_delta
+    inner_high: float = 5 + BASIC_LAYER_THICKNESS + draw_delta
     diameter_inner: float = 2
     diameter_outter: float = 4
     scraws_outter_diameter = 2.5
@@ -31,7 +31,7 @@ class Pin(Part):
     footprint_pcb: XY = XY(0, 0)
 
     base_cube_fill: OpenSCADObject = cuboid(
-        [size.x, size.y, LAYER_THICKNESS], anchor=BOTTOM
+        [size.x, size.y, BASIC_LAYER_THICKNESS], anchor=BOTTOM
     )
 
     cylihder_inner: OpenSCADObject = cylinder(
@@ -43,15 +43,15 @@ class Pin(Part):
     )
 
     scraws_chamfer: OpenSCADObject = cylinder(
-        d=scraws_outter_diameter, h=LAYER_THICKNESS, _fn=50, anchor=BOTTOM
+        d=scraws_outter_diameter, h=BASIC_LAYER_THICKNESS, _fn=50, anchor=BOTTOM
     ) + cylinder(
         d1=scraws_outter_diameter,
         d2=scraws_header_diameter,
-        h=LAYER_THICKNESS / 3,
+        h=BASIC_LAYER_THICKNESS / 3,
         _fn=50,
         anchor=BOTTOM,
     ).up(
-        LAYER_THICKNESS - LAYER_THICKNESS / 3
+        BASIC_LAYER_THICKNESS - BASIC_LAYER_THICKNESS / 3
     )
 
     def _draw_pcb_part(self) -> OpenSCADObject:

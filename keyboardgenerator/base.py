@@ -12,8 +12,6 @@ X = 0
 Y = 1
 Z = 2
 
-LAYER_THICKNESS = 2.16
-
 
 class XY:
     x: float
