@@ -378,15 +378,17 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
 [{x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:-0.4,sm:"cherry"},"E"],
-[{y:-0.87,x:1},"W",{x:1},"R",{x:-0.1,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.97,x:0.75,sm:"pinpcb",w:0.5,h:0.5},"PinPcb",{x:3.5,w:0.5,h:0.5},"PinPcb"],
+[{y:-0.9,x:1,sm:"cherry"},"W",{x:1},"R",{x:-0.1,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
 [{y:-0.9,w:0.5,h:0.5},"PPlate"],
-[{y:-0.98,x:4,sm:"cherry"},"T",{x:0.2,sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.98,x:4,sm:"cherry"},"T",{x:0.3,sm:"arduino",a:5,h:2},"Arduino"],
 [{y:-0.87,sm:"cherry",a:4},"Q"],
 [{y:-0.38,x:2},"D"],
 [{y:-0.87,x:1},"S",{x:1},"F"],
-[{y:-0.98,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.98,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:0.5,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
 [{y:-0.9,x:4,sm:"cherry"},"G"],
-[{y:-0.87},"A"],
+[{y:-0.97,x:5.10,p:"TEZ3\\nY.N",sm:"platetext"},""],
+[{y:-0.9,sm:"cherry"},"A"],
 [{y:-0.95,x:3.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
 [{y:-0.43,x:2,sm:"cherry"},"C"],
 [{y:-0.87,x:1},"X",{x:1},"V"],
@@ -394,10 +396,13 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
 [{y:-0.87},"Z"],
 [{y:-0.5,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
 [{y:-0.73,x:3.9,w:0.5,h:0.5},"PPlate"],
-[{y:-0.87,w:0.5,h:0.5},"PPlate"],
-[{r:30,rx:5,ry:3.25,y:0.5,x:-1,sm:"cherry",a:7},"","",""],
+[{y:-0.87,x:1,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-1,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:0.25,x:5.75,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.75,x:3.75,w:0.5,h:0.5},"PinPcb"],
+[{r:30,rx:5,ry:3.25,y:1,x:-1,sm:"cherry",a:7},"","",""],
 [{y:-0.8,x:-0.1,sm:"pinplate",a:4,w:0.5,h:0.5},"PPlate",{x:0.5,w:0.5,h:0.5},"PPlate"],
-[{r:90,rx:5.25,ry:1.2,y:-1.2,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
+[{r:90,rx:5.25,ry:1.2,y:-1.1,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
 ]"""
     )
     return keyboard

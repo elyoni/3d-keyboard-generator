@@ -39,7 +39,7 @@ class Arduino(Part):
         return pins_socket_obj
 
     def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
-        print("draw_bottom_part_addition_sub")
+        # print("draw_bottom_part_addition_sub")
         return cuboid(self.arduino_header, anchor=BOTTOM).translate(
             self.center_point.x,
             self.center_point.y - self.size.y / 2 + self.arduino_header[Y] / 2,

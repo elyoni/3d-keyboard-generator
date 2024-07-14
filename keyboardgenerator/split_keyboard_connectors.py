@@ -29,10 +29,6 @@ class SplitKeyboardConnector(Part):
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
-    # PCB functions
-    def draw_pcb_footprint(self) -> OpenSCADObject | None:
-        return None
-
     # Return the part on the PCB layer as a openscad object
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         return cube([self.footprint_pcb.x, self.footprint_pcb.y, 5], center=True)
@@ -63,6 +59,24 @@ class TRRSJack(SplitKeyboardConnector):
     footprint_plate: XY = XY(0, 0)
     footprint_pcb: XY = size
 
+    def _draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
+        socket_hole = cylinder(
+            d=self.socket_hold_size_diameter,
+            h=self.socket_hole_size_height + 10,
+            anchor=BOTTOM,
+        ).rotateX(90)
+
+        socket_pj_320a_connector = socket_hole.translate(
+            [
+                0,
+                -self.socket_body_size.x,
+                BASIC_LAYER_THICKNESS + 1 / 2,
+            ]  # , BASIC_LAYER_THICKNESS + 5 / 2]
+        )
+        return socket_pj_320a_connector.rotate(self.angle_rotation).translate(
+            [self.center_point.x, self.center_point.y, 0]
+        )
+
     def _draw_pcb_part(self) -> OpenSCADObject:
         socket_hole = cylinder(
             d=self.socket_hold_size_diameter,
@@ -84,12 +98,11 @@ class TRRSJack(SplitKeyboardConnector):
         )
         # socket_pj_320a_connectorOrigin = socket_pj_320a_connector
         socket_pj_320a_connector = socket_pj_320a_connector.translate(
-            [0, -self.socket_body_size.x, BASIC_LAYER_THICKNESS + 5 / 2]
+            [
+                0,
+                -self.socket_body_size.x,
+                BASIC_LAYER_THICKNESS + 1 / 2,
+            ]  # , BASIC_LAYER_THICKNESS + 5 / 2]
         )
 
-        # cylinder(d=5, h=2.2, anchor=BOTTOM).rotateX(90).translate( [0, -self.socket_size.x / 2 / 2, 2 + self.socket_size.y / 2])
-        return (
-            socket_pj_320a_connector
-            # union()
-            # cube([self.size.x, self.size.y, 6], anchor=FWD) - pj_320a_connector.debug()
-        )
+        return socket_pj_320a_connector

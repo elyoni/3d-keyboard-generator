@@ -21,6 +21,7 @@ from keyboardgenerator.base import XY, Part
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
+from keyboardgenerator.plate_text import PlateTextPart
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
 from keyboardgenerator.constants import (
     PART_LABEL_INDEX,
@@ -48,6 +49,8 @@ def get_part_obj(part_type: str):
     elif part_type == PinPcb.name:
         # print("Part type is PcbPin")
         return PinPcb
+    elif part_type == PlateTextPart.name:
+        return PlateTextPart
     elif part_type == KailhChocKey.name:
         # print("Part type is kailh")
         return KailhChocKey
@@ -92,6 +95,7 @@ class Keyboard:
 
     @classmethod
     def _get_part_type(cls, part) -> str:
+        log.debug(part.labels)
         if part.sm != "":
             return part.sm
         elif part.labels[PROFILE_LABEL_INDEX] is not None:
@@ -144,7 +148,8 @@ class Keyboard:
             else:
                 size = None
 
-            label = part.labels[PART_LABEL_INDEX]
+            # label = part.labels[PART_LABEL_INDEX]
+            label = part.profile
             part_list.append(
                 part_obj(
                     position,
@@ -162,8 +167,6 @@ class Keyboard:
         return sphere(d=1).color("blue").translate(point.x, point.y, -2)
 
     def _draw_base_plate(self, border=2, add_label=ADD_LABEL) -> OpenSCADObject:
-        if add_label:
-            move_label = XY(5, 3)
         polygonObj = []
 
         points_list = []

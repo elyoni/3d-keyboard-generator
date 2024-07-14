@@ -220,8 +220,18 @@ class Part:
             .translate(self.center_point.x, self.center_point.y, 0)
         )
 
-    def draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
+    def _draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
         return None
+
+    def draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
+        if self._draw_pcb_part_addition_sub() is None:
+            return None
+        else:
+            return (
+                self._draw_pcb_part_addition_sub()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
 
     def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
         return None
@@ -235,10 +245,16 @@ class Part:
     def draw_plate_footprint(self) -> OpenSCADObject | None:
         if self.footprint_plate is None:  # XY(0, 0):
             return None
-        return (
-            self._draw_plate_footprint()
-            .rotate(self.angle_rotation)
-            .translate(self.center_point.x, self.center_point.y, 0)
+
+        if self._draw_plate_footprint() is None:
+            footprint = cube(
+                [self.footprint_plate.x, self.footprint_plate.y, 5], center=True
+            )
+        else:
+            footprint = self._draw_plate_footprint()
+
+        return footprint.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
         )
 
     def draw_plate_part(self) -> OpenSCADObject | None:
@@ -248,4 +264,7 @@ class Part:
         return None
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
+        return None
+
+    def _draw_plate_footprint(self) -> OpenSCADObject | None:
         return None

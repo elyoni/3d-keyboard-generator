@@ -14,3 +14,7 @@ When you add a new part make sure to add the key type to the get_part_obj
 
 == Pins
 Plate pins on top of a key can be in 0.15 units on top of a key
+
+
+== Todo
+Replace all the function "draw_pcb_part_******" to "_draw_pcb_part_******" and on the main function "draw_pcb_part_******" to do the rotation and the translation of the part
