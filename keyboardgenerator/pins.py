@@ -5,7 +5,10 @@ from solid2.extensions.bosl2 import (
 )
 
 from solid2.core.object_base import OpenSCADObject
-from solid2 import union, debug
+
+from solid2 import debug
+
+# from solid2 import union
 
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import (
@@ -25,7 +28,7 @@ class Pin(Part):
     scraws_header_diameter = diameter_outter + 2.5
 
     size = XY(diameter_outter, diameter_outter)
-    footprint_plate: XY = size
+    footprint_plate: XY = XY(0, 0)  # = size
     footprint_pcb: XY = XY(0, 0)
 
     base_cube_fill: OpenSCADObject = cuboid(
@@ -52,68 +55,44 @@ class Pin(Part):
         BASIC_LAYER_THICKNESS - BASIC_LAYER_THICKNESS / 3
     )
 
-    def _draw_pcb_part(self) -> OpenSCADObject:
-        return self.base_cube_fill + self.cylihder_outter - self.cylihder_inner
-
-    def _draw_plate_part(self) -> OpenSCADObject:
-        return (
-            self.base_cube_fill
-            + self.cylihder_outter
-            - (self.cylihder_inner.translateZ(BASIC_LAYER_THICKNESS + self.draw_delta))
-        )
+    def _draw_pcb_part(self) -> OpenSCADObject | None:
+        return None
 
     def _draw_plate_footprint(self) -> OpenSCADObject:
-        return self.cylihder_outter
+        return None
 
 
 class PinPlate(Pin):
     name: str = "pinplate"
 
-    def draw_pcb_footprint(self) -> OpenSCADObject:
-        return self.cylihder_inner.rotate(self.angle_rotation).translate(
-            [self.center_point.x, self.center_point.y, 0]
-        )
-
-    def draw_pcb_part(self) -> OpenSCADObject:
-        return union()
-
-    def draw_plate_part(self) -> OpenSCADObject:
+    def _draw_plate_part(self) -> OpenSCADObject:
         return (
-            self._draw_plate_part()
-            .rotate(self.angle_rotation)
-            .translate([self.center_point.x, self.center_point.y, 0])
+            self.base_cube_fill
+            + self.cylihder_outter
+            - self.cylihder_inner.translateZ(self.draw_delta)
         )
 
-    def draw_pcb_part_addition_sub(self) -> OpenSCADObject:
-        return (self.scraws_chamfer + self.cylihder_inner.translateZ(-3)).translate(
-            [self.center_point.x, self.center_point.y, 0]
-        )
+    def _draw_plate_footprint(self) -> OpenSCADObject:
+        return self.base_cube_fill
+
+    def _draw_pcb_footprint(self) -> OpenSCADObject:
+        return self.cylihder_inner
+
+    def _draw_pcb_part_addition_sub(self) -> OpenSCADObject:
+        return self.scraws_chamfer + self.cylihder_inner.translateZ(-3)
 
 
 class PinPcb(Pin):
     name: str = "pinpcb"
 
-    def draw_plate_footprint(self) -> OpenSCADObject:
-        return None
+    # def _draw_plate_footprint(self) -> OpenSCADObject:
+    # return None
 
-    def draw_plate_part(self) -> OpenSCADObject:
-        return None
+    def _draw_pcb_part(self) -> OpenSCADObject:
+        return self.base_cube_fill + self.cylihder_outter - self.cylihder_inner
 
-    def draw_pcb_part(self) -> OpenSCADObject:
-        return (
-            self._draw_pcb_part()
-            .rotate(self.angle_rotation)
-            .translate([self.center_point.x, self.center_point.y, 0])
-        )
+    def _draw_pcb_part_addition_sub(self) -> OpenSCADObject:
+        return self.cylihder_inner.rotate(self.angle_rotation)
 
-    def draw_pcb_part_addition_sub(self) -> OpenSCADObject:
-        return debug(
-            self.cylihder_inner.rotate(self.angle_rotation).translate(
-                [self.center_point.x, self.center_point.y, 3]
-            )
-        )
-
-    def draw_bottom_part_addition_sub(self) -> OpenSCADObject:
-        return (self.scraws_chamfer + self.cylihder_inner).translate(
-            [self.center_point.x, self.center_point.y, 0]
-        )
+    def _draw_bottom_part_addition_sub(self) -> OpenSCADObject:
+        return self.scraws_chamfer + self.cylihder_inner

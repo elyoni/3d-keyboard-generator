@@ -7,6 +7,7 @@ from solid2.extensions.bosl2 import cube
 from solid2.core.object_base import OpenSCADObject
 
 # from solid2 import union
+from solid2 import debug
 
 X = 0
 Y = 1
@@ -185,7 +186,7 @@ class Part:
 
     def _draw_pcb_part(self) -> OpenSCADObject:
         raise NotImplementedError(
-            'This function "_draw_base_pcb" must be implemented, for the part ',
+            'This function "_draw_pcb_part" must be implemented, for the part ',
             type(self),
         )
 
@@ -230,23 +231,52 @@ class Part:
             return (
                 self._draw_pcb_part_addition_sub()
                 .rotate(self.angle_rotation)
+                .translate([self.center_point.x, self.center_point.y, 0])
+            )
+
+    def _draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
+        return None
+
+    def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
+        if self._draw_pcb_part_addition_add() is None:
+            return None
+        else:
+            return (
+                self._draw_pcb_part_addition_add()
+                .rotate(self.angle_rotation)
                 .translate(self.center_point.x, self.center_point.y, 0)
             )
 
-    def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
+    def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
     def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
+        if self._draw_bottom_part_addition_sub() is None:
+            return None
+        else:
+            return (
+                self._draw_bottom_part_addition_sub()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
+
+    def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     def draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
-        return None
+        if self._draw_bottom_part_addition_add() is None:
+            return None
+        else:
+            return (
+                self._draw_bottom_part_addition_add()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
 
     def draw_plate_footprint(self) -> OpenSCADObject | None:
         if self.footprint_plate is None:  # XY(0, 0):
             return None
-
-        if self._draw_plate_footprint() is None:
+        elif self._draw_plate_footprint() is None:
             footprint = cube(
                 [self.footprint_plate.x, self.footprint_plate.y, 5], center=True
             )
@@ -257,14 +287,44 @@ class Part:
             self.center_point.x, self.center_point.y, 0
         )
 
+    def _draw_plate_part(self) -> OpenSCADObject | None:
+        return None
+
     def draw_plate_part(self) -> OpenSCADObject | None:
+        if self._draw_plate_part() is None:
+            return None
+        else:
+            return (
+                self._draw_plate_part()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
+
+    def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
     def draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
+        if self._draw_plate_part_addition_sub() is None:
+            return None
+        else:
+            return (
+                self._draw_plate_part_addition_sub()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
+
+    def _draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
-        return None
+        if self._draw_plate_part_addition_add() is None:
+            return None
+        else:
+            return (
+                self._draw_plate_part_addition_add()
+                .rotate(self.angle_rotation)
+                .translate(self.center_point.x, self.center_point.y, 0)
+            )
 
     def _draw_plate_footprint(self) -> OpenSCADObject | None:
         return None

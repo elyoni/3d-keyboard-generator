@@ -6,7 +6,7 @@ from solid2.extensions.bosl2 import (
 
 from solid2.core.object_base import OpenSCADObject
 
-from solid2 import cube, import_stl
+from solid2 import cube, import_stl, color
 
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import XY, Part
@@ -16,6 +16,7 @@ class Key(Part):
     spacing: XY
     hole_size: XY
     openscad_file_path: str
+    hole_wall_thickness: float = 3
 
     # Create the holes for the key socket
     def draw_pcb_footprint(self) -> OpenSCADObject | None:
@@ -27,33 +28,41 @@ class Key(Part):
 
     def _draw_plate_footprint(self) -> OpenSCADObject | None:
         return cuboid(
-            [self.footprint_pcb.x, self.footprint_pcb.y, 5], anchor=BOTTOM
+            [self.hole_size.x, self.hole_size.y, 5], anchor=BOTTOM
         ) + cuboid(  # Hole for the key
             [
-                self.footprint_pcb.x + 3,
-                self.footprint_pcb.y + 3,
+                self.hole_size.x - self.hole_wall_thickness,
+                self.hole_size.y - self.hole_wall_thickness,
                 BASIC_LAYER_THICKNESS + 0.1,
             ],
             anchor=BOTTOM,
         ).up(
             BASIC_LAYER_THICKNESS / 2
-        )  #
+        )
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         # Create square with a hole in the middle to add more strength to the plate
         return (
             (
-                cuboid(
-                    [self.hole_size.x + 3, self.hole_size.y + 3, BASIC_LAYER_THICKNESS],
-                    anchor=BOTTOM,
+                color("red")(
+                    cuboid(
+                        [
+                            self.hole_size.x + self.hole_wall_thickness,
+                            self.hole_size.y + self.hole_wall_thickness,
+                            BASIC_LAYER_THICKNESS + 0.4,
+                        ],
+                        anchor=BOTTOM,
+                    )
                 )
-                - cuboid(
-                    [
-                        self.hole_size.x + 2,
-                        self.hole_size.y + 2,
-                        BASIC_LAYER_THICKNESS + 0.5,
-                    ],
-                    anchor=BOTTOM,
+                - (
+                    cuboid(
+                        [
+                            self.hole_size.x + 2,
+                            self.hole_size.y + 2,
+                            BASIC_LAYER_THICKNESS + 3,
+                        ],
+                        anchor=BOTTOM,
+                    )
                 )
             )
             .rotate(self.angle_rotation)

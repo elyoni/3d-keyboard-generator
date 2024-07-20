@@ -166,7 +166,7 @@ class Keyboard:
     def create_point_sphere(self, point):
         return sphere(d=1).color("blue").translate(point.x, point.y, -2)
 
-    def _draw_base_plate(self, border=2, add_label=ADD_LABEL) -> OpenSCADObject:
+    def _draw_base_plate(self, border=1, add_label=ADD_LABEL) -> OpenSCADObject:
         polygonObj = []
 
         points_list = []

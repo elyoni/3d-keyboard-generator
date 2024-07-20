@@ -19,7 +19,6 @@ class TemplatePart(Part):
         return None
 
     # PCB functions
-    # # Return the part on the PCB layer as a openscad object
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         return None
 

@@ -12,6 +12,7 @@ log.info("Creating new keyboard")
 #
 def main():
     log.info("Creating new keyboard")
+    # keyboard_json = almost_there()
     keyboard_json = one_board_tez_v4()
     log.info("Generate Keyboard Plate")
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
@@ -387,7 +388,7 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
 [{y:-0.87,x:1},"S",{x:1},"F"],
 [{y:-0.98,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:0.5,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
 [{y:-0.9,x:4,sm:"cherry"},"G"],
-[{y:-0.97,x:5.10,p:"TEZ3\\nY.N",sm:"platetext"},""],
+[{y:-0.97,x:5,p:"TEZ3\\n  Y.E",sm:"platetext"},""],
 [{y:-0.9,sm:"cherry"},"A"],
 [{y:-0.95,x:3.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
 [{y:-0.43,x:2,sm:"cherry"},"C"],
@@ -406,6 +407,21 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
 ]"""
     )
     return keyboard
+
+
+def almost_there() -> kle_serial.Keyboard:
+    Keyboard = kle_serial.parse(
+        """[
+[{y:1,x:0.75,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:0.5,sm:"pinpcb",w:0.5,h:0.5},"PinPcb",{x:0.75,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:-0.2,sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.62,x:1,p:"TEZ3\\nY.N",sm:"cherry",a:4},"A","S"],
+[{y:-0.35,x:0.75,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.75,x:3,w:0.5,h:0.5},"PinPcb"],
+[{y:-0.9,x:1,sm:"cherry"},"Z","X"],
+[{y:0.12,x:0.75,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:0.5,sm:"pinpcb",w:0.5,h:0.5},"PinPcb",{x:0.5,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{r:90,rx:5.25,ry:1.2,y:1.05,x:2,sm:"trrs",a:5,w:0.5},"trrs"]
+            ]"""
+    )
+    return Keyboard
 
 
 # [{y: 0.25, x: 2, a: 7}, ""],
