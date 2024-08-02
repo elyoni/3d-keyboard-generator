@@ -12,7 +12,7 @@ from keyboardgenerator.base import (
 
 class Arduino(Part):
     name: str = "arduino"
-    size = XY(19, 37)  # Size in mm
+    size = XY(19, 39)  # Size in mm
     footprint_plate: XY | None = None  # XY(0, 0)
     footprint_pcb: XY = size
 
@@ -35,7 +35,10 @@ class Arduino(Part):
             pins_socket_obj += cylinder(
                 d=self.pins_diameter, h=8, _fn=30, center=True
             ).translateY(i * self.pins_space)
-        pins_socket_obj = pins_socket_obj.translateY(-12.7)  # TODO, need to reduce it
+        # pins_socket_obj = pins_socket_obj.translateY(-12.7)  # TODO, need to reduce it
+        pins_socket_obj = pins_socket_obj.translateY(
+            -self.size.y / 2 + self.pins_diameter + 7
+        )
         return pins_socket_obj
 
     def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
