@@ -45,15 +45,26 @@ class Pin(Part):
 
     scraws_chamfer: OpenSCADObject = cylinder(
         d=scraws_outter_diameter, h=BASIC_LAYER_THICKNESS, _fn=50, anchor=BOTTOM
-    ) + cylinder(
-        d1=scraws_outter_diameter,
-        d2=scraws_header_diameter,
-        h=BASIC_LAYER_THICKNESS / 3,
-        _fn=50,
-        anchor=BOTTOM,
-    ).up(
-        BASIC_LAYER_THICKNESS - BASIC_LAYER_THICKNESS / 3
+    ) + debug(
+        cylinder(
+            d=diameter_outter,
+            h=BASIC_LAYER_THICKNESS,
+            _fn=50,
+            anchor=BOTTOM,
+        ).up(1)
     )
+
+    # scraws_chamfer: OpenSCADObject = cylinder(
+    # d=scraws_outter_diameter, h=BASIC_LAYER_THICKNESS, _fn=50, anchor=BOTTOM
+    # ) + cylinder(
+    # d1=scraws_outter_diameter,
+    # d2=scraws_header_diameter,
+    # h=BASIC_LAYER_THICKNESS / 3,
+    # _fn=50,
+    # anchor=BOTTOM,
+    # ).up(
+    # BASIC_LAYER_THICKNESS - BASIC_LAYER_THICKNESS / 3
+    # )
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         return None
