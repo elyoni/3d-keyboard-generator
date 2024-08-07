@@ -6,7 +6,7 @@ from solid2.extensions.bosl2 import (
 
 from solid2.core.object_base import OpenSCADObject
 
-from solid2 import debug
+# from solid2 import debug
 
 # from solid2 import union
 
@@ -45,13 +45,13 @@ class Pin(Part):
 
     scraws_chamfer: OpenSCADObject = cylinder(
         d=scraws_outter_diameter, h=BASIC_LAYER_THICKNESS, _fn=50, anchor=BOTTOM
-    ) + debug(
-        cylinder(
-            d=diameter_outter,
-            h=BASIC_LAYER_THICKNESS,
-            _fn=50,
-            anchor=BOTTOM,
-        ).up(1)
+    ) + cylinder(
+        d=diameter_outter,
+        h=BASIC_LAYER_THICKNESS,
+        _fn=50,
+        anchor=BOTTOM,
+    ).up(
+        1
     )
 
     # scraws_chamfer: OpenSCADObject = cylinder(

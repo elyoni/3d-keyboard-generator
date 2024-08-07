@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
 import numpy as np
-
 from solid2.extensions.bosl2 import cube
-
 from solid2.core.object_base import OpenSCADObject
 
 # from solid2 import union
-from solid2 import debug
+# from solid2 import debug
 
 X = 0
 Y = 1

@@ -1,8 +1,8 @@
 from keyboardgenerator.base import Part, XY
 from solid2.core.object_base import OpenSCADObject
-from solid2 import debug
-from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from solid2.extensions.bosl2 import cube, text3d, UP, union
+
+# from solid2 import debug
 
 
 class PlateTextPart(Part):
@@ -48,7 +48,7 @@ class PlateTextPart(Part):
             for line_number, line_text in enumerate(lines):
                 texts += self._draw_text(line_text, line_number * 10)
 
-        return debug(texts)
+        return texts
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
