@@ -127,6 +127,44 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
     return keyboard
 
 
+def left_side_gez_v1() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{y:0.25,x:3,sm:"cherry"},"3"],
+[{y:-0.97,x:5.4,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.93,x:6.2,sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.97,x:2,sm:"cherry",a:4},"2",{x:1},"4"],
+[{y:-0.88,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:4.5,sm:"cherry"},"5"],
+[{y:-0.87,x:1},"1"],
+[{y:-0.95},"Esc"],
+[{y:-0.48,x:4.8,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.95,x:3,sm:"cherry"},"E"],
+[{y:-0.87,x:2},"W",{x:1},"R"],
+[{y:-0.9,x:0.85,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.98,x:5,sm:"cherry"},"T"],
+[{y:-0.87,x:1},"Q"],
+[{y:-0.95},"Tab"],
+[{y:-0.43,x:3},"D"],
+[{y:-0.87,x:2},"S",{x:1},"F"],
+[{y:-0.88,x:5},"G"],
+[{y:-0.97,x:6,p:"GEZ1\\n  Y.E",sm:"platetext"},"Text"],
+[{y:-0.9,x:1,sm:"cherry"},"A"],
+[{y:-0.95},"Ctrl"],
+[{y:-0.43,x:3},"C"],
+[{y:-0.87,x:2},"X",{x:1},"V"],
+[{y:-0.95,x:0.8,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.93,x:5,sm:"cherry"},"B"],
+[{y:-0.87,x:1},"Z"],
+[{y:-0.95},"Shift"],
+[{y:-0.15,x:0.8,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.95,x:4.95,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:0.12,x:6.4,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{r:30,rx:6,ry:4.5,y:1,x:-1,sm:"cherry",a:7},"","",""],
+[{r:90,rx:6.25,ry:2.5,y:-1.05,x:1.95,p:"TEZ4\\n  Y.E",sm:"trrs",a:5,w:0.5},"trrs"]]"""
+    )
+    return keyboard
+
+
 def almost_there() -> kle_serial.Keyboard:
     Keyboard = kle_serial.parse(
         """[
