@@ -107,3 +107,10 @@ class PinPcb(Pin):
 
     def _draw_bottom_part_addition_sub(self) -> OpenSCADObject:
         return self.scraws_chamfer + self.cylihder_inner
+
+
+class PinFromBottomToPlate(PinPlate, PinPcb):
+    name: str = "pinb2t"
+
+    def _draw_pcb_part_addition_sub(self) -> OpenSCADObject:
+        return self.cylihder_inner.translateZ(-1)

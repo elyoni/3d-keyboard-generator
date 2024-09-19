@@ -19,7 +19,7 @@ import logging
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import XY, Part
 from keyboardgenerator.arduino import Arduino
-from keyboardgenerator.pins import Pin, PinPlate, PinPcb
+from keyboardgenerator.pins import Pin, PinPlate, PinPcb, PinFromBottomToPlate
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
 from keyboardgenerator.plate_text import PlateTextPart
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
@@ -49,6 +49,8 @@ def get_part_obj(part_type: str):
     elif part_type == PinPcb.name:
         # print("Part type is PcbPin")
         return PinPcb
+    elif part_type == PinFromBottomToPlate.name:
+        return PinFromBottomToPlate
     elif part_type == PlateTextPart.name:
         return PlateTextPart
     elif part_type == KailhChocKey.name:
