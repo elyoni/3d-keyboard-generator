@@ -45,14 +45,12 @@ class SplitKeyboardConnector(Part):
 
 
 class TRRSJack(SplitKeyboardConnector):
-    socket_hold_size_diameter: float = 5
+    socket_hold_size_diameter: float = 5.3
     socket_hole_size_height: float = 2.2
 
-    socket_body_size: XY = XY(6, 12.2)
+    socket_body_size: XY = XY(6.2, 12.4)
     name: str = "trrs"
-    size: XY = XY(
-        socket_body_size.x + 2, socket_body_size.y + socket_hole_size_height + 2
-    )
+    size: XY = XY(socket_body_size.x + 2, socket_body_size.y + socket_hole_size_height)
     footprint_plate: XY = XY(0, 0)
     footprint_pcb: XY = size
 
