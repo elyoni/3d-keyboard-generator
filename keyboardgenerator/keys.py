@@ -73,7 +73,12 @@ class Key(Part):
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         if os.path.isfile(self.openscad_file_path):
-            return import_stl("../" + self.openscad_file_path)
+            stl_obj = import_stl("../" + self.openscad_file_path)
+            return (
+                stl_obj.mirror([1, 0, 0])
+                if (self.mirror_affect and self.self.mirror_side)
+                else stl_obj
+            )
         else:
             raise FileNotFoundError(
                 f"File {self.openscad_file_path} does not exist. Please check the file path."
@@ -99,6 +104,7 @@ class CherryMxKey(Key):
 
 class KailhChocKey(Key):
     name: str = "kailhchoc"
+    mirror_affect: bool = True
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 

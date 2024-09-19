@@ -159,6 +159,7 @@ class Keyboard:
                     center_rotation,
                     size,
                     label,
+                    mirror_side=True,
                 )
             )
 

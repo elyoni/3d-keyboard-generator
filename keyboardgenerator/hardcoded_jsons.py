@@ -47,6 +47,7 @@ def ergodox_full_keyboard() -> kle_serial.Keyboard:
 [{x:-3},"RB3"]
 ]"""
     )
+    keyboard.meta.split = True
     return keyboard
 
 
@@ -94,7 +95,7 @@ def one_board_ergo() -> kle_serial.Keyboard:
     return keyboard
 
 
-def one_board_tez_v4() -> kle_serial.Keyboard:
+def one_board_tez_v3() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
 [{x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:-0.4,sm:"cherry"},"E",{x:2.3,sm:"arduino",a:5,h:2},"Arduino"],
@@ -124,6 +125,7 @@ def one_board_tez_v4() -> kle_serial.Keyboard:
 [{r:90,rx:5.25,ry:1.2,y:-1.1,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
 ]"""
     )
+    keyboard.meta.split = True
     return keyboard
 
 

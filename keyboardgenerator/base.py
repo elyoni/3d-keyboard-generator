@@ -148,6 +148,8 @@ class Corners:
 # General Keyboard part, can be a key, mcu, etc.
 class Part:
     # Calculate in the init function
+    mirror_affect: bool = False  # On split keyboard, the part is will be mirrored
+    mirror_side: bool  # True if needs to generate the mirror side of the keyboard
     corners: Corners
     center_point: XY  # Center XY of the part in mm NOT u.
     center_rotation: XY
@@ -167,6 +169,7 @@ class Part:
         center_rotation: XY,
         size: XY | None,
         text: str,
+        mirror_side: bool,
     ):
         self.text = text
         if size is not None:
@@ -181,6 +184,7 @@ class Part:
         self.corners = Corners(upper_left_corner, self.size).rotate(
             center_rotation, angle_rotation
         )
+        self.mirror_side = mirror_side
 
     def _draw_pcb_part(self) -> OpenSCADObject:
         raise NotImplementedError(
