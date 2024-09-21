@@ -1,16 +1,50 @@
 import pykle_serial as kle_serial
 
 
-def support_parts() -> kle_serial.Keyboard:
+def mcu() -> kle_serial.Keyboard:
     keyboard = kle_serial.parse(
         """[
-[{y:0.18,x:0.2,p:"Key",sm:"platetext",w:1.4,h:0.5},"Keys",{x:0.3,p:"Conn",w:1.4,h:0.5},"Connectors",{x:1.1,p:"Pins",h:0.5},"Pins"],
-[{y:-0.98,x:5.9,p:"TEZ3\\n  Y.E",sm:"arduino",a:5,h:2},"Arduino"],
-[{y:-0.7,x:2.3,sm:"trrs",w:0.5},"trrs"],
-[{y:-0.95,x:0.4,sm:"cherry",a:4},"MX"],
+[{y:0.2,x:5.9,sm:"arduino",a:5,h:2},"Arduino"]
+]"""
+    )
+    return keyboard
+
+
+def examples_key() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{sm:"cherry",a:7},"Q","W","E","R"],
+["A",{w:2},"S","F"],
+["Z","X","C"],
+[{r:30,y:-3,x:4.25},"V"]
+]"""
+    )
+    return keyboard
+
+
+def examples_pins() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
+[{y:-0.25,sm:"pinplate",w:0.5,h:0.5},"PinPlate"],
+[{y:-0.25,sm:"pinb2t",w:0.5,h:0.5},"PinB2P"]
+]"""
+    )
+    return keyboard
+
+
+def supported_parts() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        """[
+[{y:0.2,x:5.9,p:"TEZ3\\n  Y.E",sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.9,x:0.4,sm:"cherry",a:4},"MX"],
 [{y:-0.92,x:4.55,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
-[{y:-0.75,x:5.7,p:"MCU",sm:"platetext",h:0.5},"MCU"],
-[{y:-0.68,x:4.55,p:"TEZ3\\n  Y.E",sm:"pinplate",w:0.5,h:0.5},"PPlate"]
+[{y:-0.88,x:2.3,sm:"trrs",a:5,w:0.5},"trrs"],
+[{y:-0.82,x:1.9,p:"Conn",sm:"platetext",a:4,w:1.4,h:0.5},"Connectors",{x:1.1,p:"Pins",h:0.5},"Pins",{x:0.3,p:"MCU",h:0.5},"MCU"],
+[{y:-0.73,x:4.55,p:"TEZ3\\n  Y.E",sm:"pinplate",w:0.5,h:0.5},"PPlate"],
+[{y:-0.52,x:0.2,p:"Key",sm:"platetext",w:1.4,h:0.5},"Keys"],
+[{y:-0.98,x:4.55,p:"TEZ3\\n  Y.E",sm:"pinb2t",w:0.5,h:0.5},"PinB2T"],
+[{y:-0.75,x:0.4,sm:"cherry"},"MX"]
 ]"""
     )
     return keyboard
