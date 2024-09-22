@@ -1,12 +1,13 @@
 # TO DO List
-- [ ] Features to add
-    - [ ] The option to generate the opposite side of the PCB (mirror objects)
+- [.] Features to add
+    - [X] The option to generate the opposite side of the PCB (mirror objects)
     - [ ] Generate STL files, not only OpenScad files
     - [ ] Support json input files, not only hardcoded json
 - [ ] Write a README
     - [ ] Explain how to build a keyboard
     - [ ] How to add new components
     - [ ] How to work with keyboard-layout-editor
+    - [ ] Hot work with the split keyboard
 - [ ] Parts to Add
     - [x] Pin holder from the bottom through the PCB to the plate
     - [ ] Add more arduino pro micro components (With micro USB)
