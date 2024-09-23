@@ -15,30 +15,35 @@ OUTPUT_DIR = Path("output")
 
 
 def _generate_keyboard(
-    keyboard_json: kle_serial.Keyboard, mirror: bool = False
+    keyboard_json: kle_serial.Keyboard,
 ) -> (OpenSCADObject, OpenSCADObject, OpenSCADObject):
+    split_keyboard = hasattr(keyboard_json.meta, "split")
+
+    # == Plate ==
     log.info("\tGenerate Keyboard Plate")
     keyboard_plate = Keyboard.from_kle_obj(keyboard_json)
+    plate = keyboard_plate.draw_plate()
+    if split_keyboard:
+        keyboard_plate = Keyboard.from_kle_obj(keyboard_json, True)
+        plate += keyboard_plate.draw_plate().mirror(RIGHT).left(10)
+
+    # == PCB ==
     log.info("\tGenerate Keyboard PCB")
     keyboard_pcb = Keyboard.from_kle_obj(keyboard_json)
+    pcb = keyboard_pcb.draw_pcb()
+    if split_keyboard:
+        keyboard_pcb = Keyboard.from_kle_obj(keyboard_json, True)
+        pcb += keyboard_pcb.draw_pcb().mirror(RIGHT).left(10)
+
+    # == Bottom ==
     log.info("\tGenerate Keyboard Bottom")
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
+    bottom = keyboard_bottom.draw_bottom()
+    if split_keyboard:
+        bottom = keyboard_bottom.draw_bottom()
+        bottom += keyboard_bottom.draw_bottom().mirror(RIGHT).left(10)
+
     log.info("Done creating keyboard\n")
-    plate = (
-        keyboard_plate.draw_plate()
-        if not mirror
-        else keyboard_plate.draw_plate().mirror(RIGHT)
-    )
-
-    pcb = (
-        keyboard_pcb.draw_pcb() if not mirror else keyboard_pcb.draw_pcb().mirror(RIGHT)
-    )
-    bottom = (
-        keyboard_bottom.draw_bottom()
-        if not mirror
-        else keyboard_bottom.draw_bottom().mirror(RIGHT)
-    )
-
     return plate, pcb, bottom
 
 
@@ -114,10 +119,6 @@ def main():
     keyboard_json = hardcoded_jsons.one_board_tez_v3()  # one_board_tez_v4()
     plate, pcb, bottom = _generate_keyboard(keyboard_json)
     _generate_keyboard_openscad_files(plate, pcb, bottom)
-    if hasattr(keyboard_json.meta, "split") and keyboard_json.meta.split:
-        plate, pcb, bottom = _generate_keyboard(keyboard_json, mirror=True)
-        _generate_keyboard_openscad_files(plate, pcb, bottom, mirror=True)
-    # _generate_keyboard_stl_files(plate, pcb, bottom)
 
     print("done")
 

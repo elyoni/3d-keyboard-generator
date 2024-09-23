@@ -128,7 +128,9 @@ class Keyboard:
             )
 
     @classmethod
-    def from_kle_obj(cls, kle_obj: kle_serial.Keyboard) -> "Keyboard":
+    def from_kle_obj(
+        cls, kle_obj: kle_serial.Keyboard, mirror_side: bool = False
+    ) -> "Keyboard":
         # Determine the keyboard spacing
         key_size_scale: XY = cls.get_keyboard_spacing(kle_obj.meta.switchType)
         if kle_obj.meta.notes == "":
@@ -159,7 +161,7 @@ class Keyboard:
                     center_rotation,
                     size,
                     label,
-                    mirror_side=True,
+                    mirror_side=mirror_side,
                 )
             )
 
