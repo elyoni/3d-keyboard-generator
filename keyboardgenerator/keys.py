@@ -2,6 +2,7 @@ import os
 from solid2.extensions.bosl2 import (
     cuboid,
     BOTTOM,
+    RIGHT,
 )
 
 from solid2.core.object_base import OpenSCADObject
@@ -73,7 +74,12 @@ class Key(Part):
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         if os.path.isfile(self.openscad_file_path):
-            return import_stl("../" + self.openscad_file_path)
+            stl_obj = import_stl("../" + self.openscad_file_path)
+            return (
+                stl_obj.mirror(RIGHT)
+                if (self.mirror_affect and self.mirror_side)
+                else stl_obj
+            )
         else:
             raise FileNotFoundError(
                 f"File {self.openscad_file_path} does not exist. Please check the file path."
@@ -82,6 +88,7 @@ class Key(Part):
 
 class CherryMxKey(Key):
     name: str = "cherry"
+    mirror_affect: bool = True
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 
@@ -99,6 +106,7 @@ class CherryMxKey(Key):
 
 class KailhChocKey(Key):
     name: str = "kailhchoc"
+    mirror_affect: bool = True
     spacing = XY(19.05, 19.05)  # Size
     hole_size = XY(14.03, 14.03)  # Size
 
