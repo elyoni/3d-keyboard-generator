@@ -2,7 +2,7 @@ from keyboardgenerator.base import Part, XY
 from solid2.core.object_base import OpenSCADObject
 from solid2.extensions.bosl2 import cube, text3d, UP, union, RIGHT
 
-from solid2 import debug
+# from solid2 import debug
 
 
 class PlateTextPart(Part):
@@ -66,7 +66,7 @@ class PlateTextPart(Part):
                     line_text, self.mirror_side, max_char, line_number * 10
                 )
 
-        return debug(texts) if (self.mirror_affect and self.mirror_side) else texts
+        return texts if (self.mirror_affect and self.mirror_side) else texts
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None

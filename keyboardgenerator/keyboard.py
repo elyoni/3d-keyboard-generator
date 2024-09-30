@@ -65,7 +65,6 @@ def get_part_obj(part_type: str):
         return CherryMxKey
     # ---> Add HEAR A NEW PART <---
     elif part_type == "":
-        # log.debug("Part type is empty, using CherryMxKey as default")
         return CherryMxKey
     else:
         raise ValueError(

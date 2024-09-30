@@ -20,27 +20,27 @@ class SplitKeyboardConnector(Part):
             return None
         return cube([self.footprint_plate.x, self.footprint_plate.y, 5], center=True)
 
-    def draw_plate_part(self) -> OpenSCADObject | None:
+    def _draw_plate_part(self) -> OpenSCADObject | None:
         return None
 
-    def draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
+    def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
-    def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
+    def _draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     # Return the part on the PCB layer as a openscad object
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         return cube([self.footprint_pcb.x, self.footprint_pcb.y, 5], center=True)
 
-    def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
+    def _draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     # Bottom functions
-    def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
+    def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
-    def draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
+    def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
 
