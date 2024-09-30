@@ -22,6 +22,7 @@ from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb, PinFromBottomToPlate
 from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
 from keyboardgenerator.plate_text import PlateTextPart
+from keyboardgenerator.holes import Holes
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
 from keyboardgenerator.constants import (
     PART_LABEL_INDEX,
@@ -63,6 +64,8 @@ def get_part_obj(part_type: str):
     elif part_type == CherryMxKey.name:
         # print("Part type is cherry")
         return CherryMxKey
+    elif part_type == Holes.name:
+        return Holes
     # ---> Add HEAR A NEW PART <---
     elif part_type == "":
         return CherryMxKey
