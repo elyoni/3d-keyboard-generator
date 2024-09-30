@@ -1,7 +1,9 @@
 from solid2.core.object_base import OpenSCADObject
 from keyboardgenerator.base import Part, XY
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
-from solid2.extensions.bosl2 import cube, BOTTOM, cylinder, FWD
+from solid2.extensions.bosl2 import cube, cuboid, BOTTOM, cylinder, FWD
+
+from solid2 import debug
 
 # from solid2 import (
 #     union,
@@ -65,6 +67,9 @@ class TRRSJack(SplitKeyboardConnector):
             .translate(0, -self.socket_body_size.x, BASIC_LAYER_THICKNESS + 1 / 3)
         )
         return socket_hole
+
+    def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
+        return cuboid([self.socket_body_size * 2.5, BASIC_LAYER_THICKNESS])
 
     def _draw_pcb_part(self) -> OpenSCADObject:
         socket_hole = cylinder(
