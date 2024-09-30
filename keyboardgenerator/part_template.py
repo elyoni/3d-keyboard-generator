@@ -1,12 +1,17 @@
 from keyboardgenerator.base import Part, XY
 from solid2.core.object_base import OpenSCADObject
 
+# from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+# from solid2.extensions.bosl2 import cuboid, BOTTOM
+# from solid2 import debug
+
 
 class TemplatePart(Part):
     name: str = "templatepart"
     size = XY(1, 1)  # Size
+    # spacing = XY(14.03, 14.03)  # Take into account the size of the part from the KLE object.
     footprint_plate: XY | None = XY(0, 0)
-    footprint_pcb: XY = size
+    footprint_pcb: XY = size  # XY(0,0)
 
     # Plate functions
     def _draw_plate_part(self) -> OpenSCADObject | None:
