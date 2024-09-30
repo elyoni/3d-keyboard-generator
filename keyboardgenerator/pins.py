@@ -80,6 +80,9 @@ class PinPlate(Pin):
     def _draw_pcb_part_addition_sub(self) -> OpenSCADObject:
         return self.scraws_chamfer + self.cylihder_inner.translateZ(-3)
 
+    def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
+        return self.cylihder_inner.translateZ(0.2)
+
 
 class PinPcb(Pin):
     name: str = "pinpcb"

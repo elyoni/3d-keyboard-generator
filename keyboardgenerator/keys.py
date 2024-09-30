@@ -7,7 +7,7 @@ from solid2.extensions.bosl2 import (
 
 from solid2.core.object_base import OpenSCADObject
 
-from solid2 import cube, import_stl, color
+from solid2 import cube, import_stl, color, debug
 
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import XY, Part
@@ -70,6 +70,14 @@ class Key(Part):
             .translate(
                 [self.center_point.x, self.center_point.y, BASIC_LAYER_THICKNESS]
             )
+        )
+
+    def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
+        return debug(
+            cuboid(
+                [self.hole_size.x, self.hole_size.y, BASIC_LAYER_THICKNESS],
+                anchor=BOTTOM,
+            ).down(0)
         )
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
