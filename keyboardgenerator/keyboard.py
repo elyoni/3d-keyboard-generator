@@ -234,8 +234,8 @@ class Keyboard:
             self._draw_base_plate(add_label=ADD_LABEL)
             - footprint_objs
             + part_objs
-            - part_addition_sub
             + part_addition_add
+            - part_addition_sub
         )
 
     def draw_pcb(self) -> OpenSCADObject:
