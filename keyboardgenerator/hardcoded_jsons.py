@@ -108,7 +108,7 @@ def one_board_tez_v3() -> kle_serial.Keyboard:
 [{y:-0.87,x:1},"S",{x:1},"F"],
 [{y:-0.98,x:1.9,sm:"pinplate",w:0.5,h:0.5},"PPlate",{x:0.5,sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
 [{y:-0.9,x:4,sm:"cherry"},"G"],
-[{y:-0.97,x:5,p:"TEZ3\\n  Y.E",sm:"platetext",a:7},""],
+[{y:-0.97,x:5,p:"TEZ3\\n  Y.E",sm:"platetext",a:7},"Text"],
 [{y:-0.9,sm:"cherry",a:4},"A"],
 [{y:-0.95,x:3.9,sm:"pinplate",w:0.5,h:0.5},"PPlate"],
 [{y:-0.43,x:2,sm:"cherry"},"C"],
@@ -166,6 +166,35 @@ def left_side_gez_v1() -> kle_serial.Keyboard:
 ]"""
     )
     # keyboard.meta.split = True
+    return keyboard
+
+
+def tez_v3() -> kle_serial.Keyboard:
+    keyboard = kle_serial.parse(
+        r"""[
+[{x:2,sm:"cherry"},"E",{x:1.5,sm:"pinplate",w:0.2,h:0.2},"PB2T",{x:0.6,sm:"arduino",a:5,h:2},"Arduino"],
+[{y:-0.87,x:1,sm:"cherry",a:4},"W",{x:1},"R"],
+[{y:-0.9,sm:"pinplate",w:0.2,h:0.2},"PB2T"],
+[{y:-0.98,x:4,sm:"cherry"},"T"],
+[{y:-0.87},"Q"],
+[{y:-0.38,x:2},"D"],
+[{y:-0.95,x:0.95,sm:"pinplate",w:0.2,h:0.2},"PPlate"],
+[{y:-0.92,x:1,p:"",sm:"cherry"},"S",{x:1},"F"],
+[{y:-0.88,x:4},"G"],
+[{y:-0.97,x:5,p:"TEZ3\n  Y.E",sm:"platetext"},"Text"],
+[{y:-0.9,sm:"cherry"},"A"],
+[{y:-0.38,x:3.9,sm:"pinplate",w:0.2,h:0.2},"PPlate"],
+[{y:-1,x:2,sm:"cherry"},"C"],
+[{y:-0.87,x:1},"X",{x:1},"V"],
+[{y:-0.88,x:4},"B"],
+[{y:-0.87},"Z"],
+[{y:0.27,x:2.25,sm:"pinplate",w:0.2,h:0.2},"PB2T"],
+[{y:-0.25,x:5.5,p:"",w:0.2,h:0.2},"PB2T"],
+[{r:30,rx:5,ry:3.25,y:1,x:-1,sm:"cherry",a:7},"","",""],
+[{r:90,rx:5.25,ry:1.2,y:-1.1,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
+]"""
+    )
+    keyboard.meta.split = True
     return keyboard
 
 
