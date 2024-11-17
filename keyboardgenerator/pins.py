@@ -10,7 +10,7 @@ from solid2.core.object_base import OpenSCADObject
 
 # from solid2 import union
 
-from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS, CHERRY_MX_PCB_HEIGHT
 from keyboardgenerator.base import (
     XY,
     Part,
@@ -20,7 +20,7 @@ from keyboardgenerator.base import (
 class Pin(Part):
     name: str = "pin"
     draw_delta = 0.5
-    height: float = 5  # 10  # Original Value was 5
+    height: float = CHERRY_MX_PCB_HEIGHT  # 10  # Original Value was 5
     inner_high: float = 5 + BASIC_LAYER_THICKNESS + draw_delta  # + 10
     diameter_inner: float = 2
     diameter_outer: float = 4
@@ -61,6 +61,7 @@ class Pin(Part):
         return None
 
 
+# Pin between the plate and the pcb layers
 class PinPlate(Pin):
     name: str = "pinplate"
 

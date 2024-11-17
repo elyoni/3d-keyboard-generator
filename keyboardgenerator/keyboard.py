@@ -88,15 +88,6 @@ class Keyboard:
         self.parts_list = part_list
         self.plate_border = plate_border
 
-    # @classmethod
-    # def from_kle_file(cls, kle_json_file: Path) -> "Keyboard":
-    # part_list = []
-    # with open(kle_json_file) as json_file:
-    # data = json.load(json_file)
-    # for part in data["keys"]:
-    # part_list.append(from_kle(part))
-    # return cls(part_list)
-
     @classmethod
     def _get_part_type(cls, part) -> str:
         log.debug(part.labels)
@@ -242,11 +233,6 @@ class Keyboard:
         )
 
     def draw_pcb(self) -> OpenSCADObject:
-        # footprint_objs = union()
-        # part_objs = union()
-        # part_addition_sub = union()
-        # part_addition_add = union()
-
         footprint_objs = []
         part_objs = []
         part_addition_sub = []
@@ -291,21 +277,3 @@ class Keyboard:
                 bottom_objs += draw_bottom_part_addition_add
 
         return bottom_objs
-
-
-# Create Plate: _base_plate - part.footprint + part.plate_openscad_obj + part.plate_additional_add - part.plate_additional_sub
-
-# self._draw_base_plate(border=)
-#    - sum(part.draw_plate_footprint)
-#    + sum(part.plate_openscad_obj)
-#    - sum(part.plate_additional_sub)
-
-
-# draw_base_plate_xxx - will affect the base plate of the keyboard
-# part.draw_base_plate_sub()
-# part.draw_base_plate_add()
-# draw_plate - Will affect the plate it self
-# part.draw_plate_add()
-# part.draw_plate_sub()
-# part.draw_sub_add()
-# part.draw_sub_sub()
