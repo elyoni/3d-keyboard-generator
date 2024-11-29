@@ -181,7 +181,7 @@ def tez_v3() -> kle_serial.Keyboard:
 [{y:-0.95,x:0.95,sm:"pinplate",w:0.2,h:0.2},"PPlate"],
 [{y:-0.92,x:1,p:"",sm:"cherry"},"S",{x:1},"F"],
 [{y:-0.88,x:4},"G"],
-[{y:-0.97,x:5,p:"TEZ3\n  Y.E",sm:"platetext"},"Text"],
+[{y:-0.97,x:5,p:"GEZ1\n  Y.E",sm:"platetext"},"Text"],
 [{y:-0.9,sm:"cherry"},"A"],
 [{y:-0.38,x:3.9,sm:"pinplate",w:0.2,h:0.2},"PPlate"],
 [{y:-1,x:2,sm:"cherry"},"C"],
