@@ -35,6 +35,10 @@ The script processes each element of the KLE JSON to create a precise, functiona
 ```
 ![Mcu](Documents/MCU.png)
 
+Links:
+- [AliExpress: Arduino micro pro - ATMEGA32U4; $3.38](https://www.aliexpress.com/item/32840365436.html?spm=a2g0o.order_list.order_list_main.51.587a586aZr4UDJ&gatewayAdapt=glo2isr)
+- [AliExpress: Kailh Hot-swappable Cherry MX Switches 70pcs;$4.23](https://www.aliexpress.com/item/1005007052649640.html?spm=a2g0o.order_list.order_list_main.208.587a586aZr4UDJ)
+
 ### Pins (Layer Connectors)
 - Pins act as placeholders for screws, providing modular assembly of keyboard layers.
 - **Pin Types**:
@@ -51,6 +55,11 @@ The script processes each element of the KLE JSON to create a precise, functiona
 
 ### Split Keyboard Connector
 - **TRRS Connector**: Support for split keyboard designs with TRRS connections.
+
+Links:
+- (AliExpress: TRRS 3.5 MM Audio Jack; $1.70)[https://www.aliexpress.com/item/33029465106.html?spm=a2g0o.productlist.main.1.45292131UAf0Tw&algo_pvid=9ce41c8b-ff7e-4e54-9457-0814c79c66d4&algo_exp_id=9ce41c8b-ff7e-4e54-9457-0814c79c66d4-0&pdp_npi=4%40dis%21USD%211.70%211.70%21%21%211.70%211.70%21%402151e46917329051611993734e6599%2112000038224902314%21sea%21IL%21127936346%21X&curPageLogUid=z5zv1cR3F34N&utparam-url=scene%3Asearch%7Cquery_from%3A]
+- (AliExpress: TRRS Coiled Spiral Cable 5~40cm; $1.69)[https://www.aliexpress.com/item/1005006141489472.html?spm=a2g0o.order_list.order_list_main.21.587a586aZr4UDJ&gatewayAdapt=glo2isr]
+- (AliExpress: TRRS Coiled Spiral Cable Up to 1.5m; $1.35) [https://www.aliexpress.com/item/33001682979.html?spm=a2g0o.order_list.order_list_main.202.587a586aZr4UDJ&gatewayAdapt=glo2isr]
 
 ### Text
 - Custom text can be engraved onto the plate.
