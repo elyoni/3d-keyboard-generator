@@ -1,5 +1,6 @@
 from solid2.extensions.bosl2 import (
     sphere,
+    round2d,
 )
 
 from solid2.core.object_base import OpenSCADObject
@@ -16,7 +17,7 @@ from scipy.spatial import ConvexHull
 import logging
 
 
-from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
+from keyboardgenerator.constants import BASIC_LAYER_THICKNESS, BORDER_RADIUS
 from keyboardgenerator.base import XY, Part
 from keyboardgenerator.arduino import Arduino
 from keyboardgenerator.pins import Pin, PinPlate, PinPcb, PinFromBottomToPlate
@@ -200,7 +201,9 @@ class Keyboard:
         for _x, _y in zip(x, y):
             points.append((_x, _y))
 
-        return polygonObj + polygon(points).linear_extrude(BASIC_LAYER_THICKNESS)
+        return polygonObj + round2d(r=BORDER_RADIUS, _fn=50)(
+            polygon(points)
+        ).linear_extrude(BASIC_LAYER_THICKNESS)
 
     def draw_plate(self) -> OpenSCADObject:
         footprint_objs = union()
