@@ -129,3 +129,11 @@ At this point, I realized I had two options:
 2. Start a new project similar to 50an6xy06r6n’s, but instead of using diodes and wires to connect the columns, use a proper hot-swappable connector.
 
 Long story short, I decided to create my own project. There were several reasons: I wasn’t sure which layout I wanted, and I didn’t want to waste money on unwanted PCBs. By creating my own project, I could easily try different components like an LCD or a joystick. I chose Python and pythonsolid2 for my project because I don’t really like OpenSCAD and enjoy the flexibility Python provides.
+
+## License
+
+This project is licensed under a **Non-Commercial Use License**.  
+You may use, modify, and share this code **only for personal and non-commercial purposes**.  
+**Commercial use, distribution, or resale is strictly prohibited.**
+
+For more details, see the [LICENSE](LICENSE.txt) file.

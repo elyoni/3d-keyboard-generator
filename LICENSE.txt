@@ -1,0 +1,25 @@
+Non-Commercial Use License
+
+Copyright (c) 2025 Yehonatan (Yoni) Elentok.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software for personal and non-commercial purposes only,
+subject to the following conditions:
+
+Non-Commercial Use Only: You may not use, sell, distribute, sublicense, or otherwise
+exploit the Software for any commercial purpose, including but not limited to selling
+copies, offering services based on the Software, or integrating it into paid products.
+
+Attribution: If you distribute or share modified versions of the Software, you must
+credit the original author by including this license and a link to the original repository.
+
+No Warranty: This Software is provided "as is," without any warranty of any kind, express
+or implied. The author is not responsible for any damages or issues arising from the use of the Software.
+
+Modification and Distribution: You may modify and distribute the Software, but only if
+it remains under this same license and retains the non-commercial restriction.
+
+Termination: If you violate any terms of this license, your rights under it will terminate automatically.
+
+For any commercial use inquiries, please contact the original author.
