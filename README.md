@@ -4,12 +4,12 @@
 
 After experimenting with various custom keyboards, including the Ergodox and my own hand-built designs, I realized I wanted something more flexible and hot-swappable. My journey led me to a project that inspired me to create my own fully customizable keyboard, allowing me to test different layouts and components. This project not only solves my ergonomic needs but also provides the creative freedom to explore new features. <F12>
 
-[Go here to read the full motivation story](#motivation-\(full-version\))
-
+[Go here to read the full motivation story](<#motivation-(full-version)>)
 
 ## Project Description
 
 This application takes a JSON file output from KLE and generates three STL files that are ready for 3D printing:
+
 1. **Plate**: The top layer that holds the switches.
 2. **PCB**: The layer designed to house the electronic components.
 3. **Bottom**: The bottom layer, which encloses the keyboard.
@@ -19,49 +19,61 @@ The script processes each element of the KLE JSON to create a precise, functiona
 ## Supported Parts
 
 ### Keys
+
 - **Cherry MX switches**
+
 ```json
 [{sm:"cherry",a:7},"Q","W","E","R"],
 ["A",{w:2},"S","F"],
 ["Z","X","C"],
 [{r:30,y:-3,x:4.25},"V"]
 ```
+
 ![Keys](Documents/Keys.png)
 
 ### Arduino
+
 - **Arduino** with Type C connection support
+
 ```json
-[{y:0.2,x:5.9,sm:"arduino",a:5,h:2},"Arduino"]
+[{ "y": 0.2, "x": 5.9, "sm": "arduino", "a": 5, "h": 2 }, "Arduino"]
 ```
+
 ![Mcu](Documents/MCU.png)
 
 Links:
+
 - [AliExpress: Arduino micro pro - ATMEGA32U4; $3.38](https://www.aliexpress.com/item/32840365436.html?spm=a2g0o.order_list.order_list_main.51.587a586aZr4UDJ&gatewayAdapt=glo2isr)
 - [AliExpress: Kailh Hot-swappable Cherry MX Switches 70pcs;$4.23](https://www.aliexpress.com/item/1005007052649640.html?spm=a2g0o.order_list.order_list_main.208.587a586aZr4UDJ)
 
 ### Pins (Layer Connectors)
+
 - Pins act as placeholders for screws, providing modular assembly of keyboard layers.
 - **Pin Types**:
   - **PinPcb**: Connects the Bottom layer to the PCB.
   - **PinPlate**: Connects the PCB to the Plate.
   - **PinB2P**: Direct connection between the Bottom layer and the Plate.
+
 ```json
 [{sm:"pinpcb",w:0.5,h:0.5},"PinPcb"],
 [{y:-0.25,sm:"pinplate",w:0.5,h:0.5},"PinPlate"],
 [{y:-0.25,sm:"pinb2t",w:0.5,h:0.5},"PinB2P"]
 ```
+
 ![Pin](Documents/Pins.png)
 
-
 ### Split Keyboard Connector
+
 - **TRRS Connector**: Support for split keyboard designs with TRRS connections.
 
 Links:
+
 - (AliExpress: TRRS 3.5 MM Audio Jack; $1.70)[https://www.aliexpress.com/item/33029465106.html?spm=a2g0o.productlist.main.1.45292131UAf0Tw&algo_pvid=9ce41c8b-ff7e-4e54-9457-0814c79c66d4&algo_exp_id=9ce41c8b-ff7e-4e54-9457-0814c79c66d4-0&pdp_npi=4%40dis%21USD%211.70%211.70%21%21%211.70%211.70%21%402151e46917329051611993734e6599%2112000038224902314%21sea%21IL%21127936346%21X&curPageLogUid=z5zv1cR3F34N&utparam-url=scene%3Asearch%7Cquery_from%3A]
 - (AliExpress: TRRS Coiled Spiral Cable 5~40cm; $1.69)[https://www.aliexpress.com/item/1005006141489472.html?spm=a2g0o.order_list.order_list_main.21.587a586aZr4UDJ&gatewayAdapt=glo2isr]
 - (AliExpress: TRRS Coiled Spiral Cable Up to 1.5m; $1.35) [https://www.aliexpress.com/item/33001682979.html?spm=a2g0o.order_list.order_list_main.202.587a586aZr4UDJ&gatewayAdapt=glo2isr]
 
 ### Text
+
 - Custom text can be engraved onto the plate.
 
 ## Real Keyboard Examples
@@ -95,6 +107,7 @@ Links:
 [{y:-0.8,x:-0.1,sm:"pinplate",a:4,w:0.5,h:0.5},"PPlate",{x:0.5,w:0.5,h:0.5},"PPlate"],
 [{r:90,rx:5.25,ry:1.2,y:-1.1,x:1.85,sm:"trrs",a:5,w:0.5},"trrs"]
 ```
+
 ![TEZ3 KLE Output](Documents/tez3_kle.png)
 
 ![TEZ3 PCB Mid Print](Documents/tez3_pcb_mid_print.jpg)
@@ -103,12 +116,13 @@ Links:
 ![TEZ3 Final Product](Documents/tez3_final.jpg)
 
 ### How to add new part:
+
 WIP
 
-
 ## Left Over:
-* Support Kailh switch (Low Profile)
-* JSON input
+
+- Support Kailh switch (Low Profile)
+- JSON input
 
 ## Motivation (Full Version)
 
@@ -117,6 +131,7 @@ In 2020, my brother gave me his Ergodox keyboard [here’s a picture of the Ergo
 When my job announced that we needed to return to the office, I decided to build my own keyboard—one for home and one for the office. I wanted to keep it as affordable as possible, so I bought a bamboo cutting board from IKEA, a plate, keys, and keycaps from AliExpress. I carved out space in the cutting board for the plate and keys, which took over 4 hours. Then, I hand-wired all the keys and called the keyboard "TEZ" (Travel Easy). After using it for a few months, I realized I didn’t really like it and went back to carrying my Ergodox everywhere.
 
 During this time, I learned a few things:
+
 1. I prefer fewer keys and now use just 36.
 2. To comfortably use the three thumb keys, I needed to shift them slightly to the right (on the left side of the keyboard).
 3. I wanted the keys to be hot-swappable.
