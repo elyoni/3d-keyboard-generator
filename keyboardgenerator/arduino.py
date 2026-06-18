@@ -1,3 +1,5 @@
+import operator
+
 from solid2.extensions.bosl2 import cube, cuboid, cylinder, union, BOTTOM
 from solid2.core.object_base import OpenSCADObject
 
@@ -50,22 +52,17 @@ class Arduino(Part):
         )
         return pins_socket_obj
 
-    def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
-        # print("draw_bottom_part_addition_sub")
-        # - self.border_size,
-        import operator
-
+    def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         arduino_header = tuple(
             map(operator.add, self.arduino_header, (0, self.border_size, 0))
         )
-        return cuboid(arduino_header, anchor=BOTTOM).translate(
-            self.center_point.x,
-            self.center_point.y
-            - self.border_size / 2
+        y_offset = (
+            -self.border_size / 2
             - self.size.y / 2
-            + self.arduino_header[Y] / 2,
-            -self.arduino_header[Z] + BASIC_LAYER_THICKNESS * 2 / 3,
+            + self.arduino_header[Y] / 2
         )
+        z_offset = -self.arduino_header[Z] + BASIC_LAYER_THICKNESS * 2 / 3
+        return cuboid(arduino_header, anchor=BOTTOM).translate(0, y_offset, z_offset)
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
         baseLayer: OpenSCADObject = cube(self.pcb_size, anchor=BOTTOM)

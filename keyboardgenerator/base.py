@@ -90,9 +90,16 @@ class XY:
             # Raise an exception if the other object is not a XY
             raise ValueError("Addition is only supported between two XY instances")
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, XY):
+            return self.x == other.x and self.y == other.y
+        return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self.x, self.y))
+
     def rotate(self, center_point: "XY", rotation_degree: float) -> "XY":
         if rotation_degree == 0:
-            "easy case"
             return self
         angle = np.deg2rad(rotation_degree)
         R = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
