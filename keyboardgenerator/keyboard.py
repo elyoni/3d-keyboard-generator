@@ -38,43 +38,33 @@ log = logging.getLogger(__name__)
 
 ADD_LABEL = False
 
+_PART_REGISTRY: dict[str, type] = {
+    cls.name: cls
+    for cls in [
+        Arduino,
+        Pin,
+        PinPlate,
+        PinPcb,
+        PinFromBottomToPlate,
+        PlateTextPart,
+        KailhChocKey,
+        SplitKeyboardConnector,
+        TRRSJack,
+        CherryMxKey,
+        Holes,
+    ]
+}
+
 
 def get_part_obj(part_type: str):
-    if part_type == Arduino.name:
-        return Arduino
-    elif part_type == Pin.name:
-        # print("Part type is Pin")
-        return Pin
-    elif part_type == PinPlate.name:
-        # print("Part type is PlatePin")
-        return PinPlate
-    elif part_type == PinPcb.name:
-        # print("Part type is PcbPin")
-        return PinPcb
-    elif part_type == PinFromBottomToPlate.name:
-        return PinFromBottomToPlate
-    elif part_type == PlateTextPart.name:
-        return PlateTextPart
-    elif part_type == KailhChocKey.name:
-        # print("Part type is kailh")
-        return KailhChocKey
-    elif part_type == SplitKeyboardConnector.name:
-        return SplitKeyboardConnector
-    elif part_type == TRRSJack.name:
-        return TRRSJack
-    elif part_type == CherryMxKey.name:
-        # print("Part type is cherry")
+    if part_type == "":
         return CherryMxKey
-    elif part_type == Holes.name:
-        return Holes
-    # ---> Add HEAR A NEW PART <---
-    elif part_type == "":
-        return CherryMxKey
-    else:
+    try:
+        return _PART_REGISTRY[part_type]
+    except KeyError:
         raise ValueError(
-            "Don't know what type of spacing you are using,"
-            "add the information in the json file"
-            "Look at the readme file for more information. part_type:" + part_type
+            f"Unknown part type '{part_type}'. "
+            "Add it to _PART_REGISTRY in keyboard.py."
         )
 
 
