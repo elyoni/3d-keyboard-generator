@@ -19,13 +19,8 @@ class Key(Part):
     openscad_file_path: str
     hole_wall_thickness: float = 3
 
-    # Create the holes for the key socket
-    def draw_pcb_footprint(self) -> OpenSCADObject | None:
-        return (
-            cube([self.size.x, self.size.y, 5], center=True)
-            .rotate(self.angle_rotation)
-            .translate([self.center_point.x, self.center_point.y, 0])
-        )
+    def _draw_pcb_footprint(self) -> OpenSCADObject | None:
+        return cube([self.size.x, self.size.y, 5], center=True)
 
     def _draw_plate_footprint(self) -> OpenSCADObject | None:
         return cuboid(

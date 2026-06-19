@@ -209,89 +209,79 @@ class Part:
             self.corners.rotate(self.center_point, self.angle_rotation)
         return self
 
+    def _draw_pcb_footprint(self) -> OpenSCADObject | None:
+        return None
+
     def draw_pcb_footprint(self) -> OpenSCADObject | None:
         if self.footprint_pcb == XY(0, 0):
-            # No footprint
             return None
-
-        return (
-            cube([self.footprint_pcb.x, self.footprint_pcb.y, 5], center=True)
-            .rotate(self.angle_rotation)
-            .translate(self.center_point.x, self.center_point.y, 0)
+        footprint = self._draw_pcb_footprint()
+        if footprint is None:
+            footprint = cube([self.footprint_pcb.x, self.footprint_pcb.y, 5], center=True)
+        return footprint.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
         )
 
-    # # Return the part on the PCB layer as a openscad object
     def draw_pcb_part(self) -> OpenSCADObject | None:
-        if self._draw_pcb_part() is None:
+        result = self._draw_pcb_part()
+        if result is None:
             return None
-        return (
-            self._draw_pcb_part()
-            .rotate(self.angle_rotation)
-            .translate(self.center_point.x, self.center_point.y, 0)
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
         )
 
     def _draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
     def draw_pcb_part_addition_sub(self) -> OpenSCADObject | None:
-        if self._draw_pcb_part_addition_sub() is None:
+        result = self._draw_pcb_part_addition_sub()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_pcb_part_addition_sub()
-                .rotate(self.angle_rotation)
-                .translate([self.center_point.x, self.center_point.y, 0])
-            )
+        return result.rotate(self.angle_rotation).translate(
+            [self.center_point.x, self.center_point.y, 0]
+        )
 
     def _draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     def draw_pcb_part_addition_add(self) -> OpenSCADObject | None:
-        if self._draw_pcb_part_addition_add() is None:
+        result = self._draw_pcb_part_addition_add()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_pcb_part_addition_add()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
     def draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
-        if self._draw_bottom_part_addition_sub() is None:
+        result = self._draw_bottom_part_addition_sub()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_bottom_part_addition_sub()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     def draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
-        if self._draw_bottom_part_addition_add() is None:
+        result = self._draw_bottom_part_addition_add()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_bottom_part_addition_add()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def draw_plate_footprint(self) -> OpenSCADObject | None:
-        if self.footprint_plate is None:  # XY(0, 0):
+        if self.footprint_plate is None:
             return None
-        elif self._draw_plate_footprint() is None:
+        footprint = self._draw_plate_footprint()
+        if footprint is None:
             footprint = cube(
                 [self.footprint_plate.x, self.footprint_plate.y, 5], center=True
             )
-        else:
-            footprint = self._draw_plate_footprint()
-
         return footprint.rotate(self.angle_rotation).translate(
             self.center_point.x, self.center_point.y, 0
         )
@@ -300,40 +290,34 @@ class Part:
         return None
 
     def draw_plate_part(self) -> OpenSCADObject | None:
-        if self._draw_plate_part() is None:
+        result = self._draw_plate_part()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_plate_part()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
         return None
 
     def draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
-        if self._draw_plate_part_addition_sub() is None:
+        result = self._draw_plate_part_addition_sub()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_plate_part_addition_sub()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def _draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
-        if self._draw_plate_part_addition_add() is None:
+        result = self._draw_plate_part_addition_add()
+        if result is None:
             return None
-        else:
-            return (
-                self._draw_plate_part_addition_add()
-                .rotate(self.angle_rotation)
-                .translate(self.center_point.x, self.center_point.y, 0)
-            )
+        return result.rotate(self.angle_rotation).translate(
+            self.center_point.x, self.center_point.y, 0
+        )
 
     def _draw_plate_footprint(self) -> OpenSCADObject | None:
         return None
