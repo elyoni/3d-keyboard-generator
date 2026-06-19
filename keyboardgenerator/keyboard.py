@@ -226,10 +226,10 @@ class Keyboard:
         )
 
     def draw_pcb(self) -> OpenSCADObject:
-        footprint_objs = []
-        part_objs = []
-        part_addition_sub = []
-        part_addition_add = []
+        footprint_objs = union()
+        part_objs = union()
+        part_addition_sub = union()
+        part_addition_add = union()
 
         for part in self.parts_list:
             draw_pcb_footprint = part.draw_pcb_footprint()

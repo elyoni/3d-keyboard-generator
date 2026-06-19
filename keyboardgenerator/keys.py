@@ -7,7 +7,7 @@ from solid2.extensions.bosl2 import (
 
 from solid2.core.object_base import OpenSCADObject
 
-from solid2 import cube, import_stl, color, debug
+from solid2 import cube, import_stl, color
 
 from keyboardgenerator.constants import BASIC_LAYER_THICKNESS
 from keyboardgenerator.base import XY, Part
@@ -68,11 +68,9 @@ class Key(Part):
         )
 
     def _draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
-        return debug(
-            cuboid(
-                [self.hole_size.x, self.hole_size.y, BASIC_LAYER_THICKNESS],
-                anchor=BOTTOM,
-            ).down(0)
+        return cuboid(
+            [self.hole_size.x, self.hole_size.y, BASIC_LAYER_THICKNESS],
+            anchor=BOTTOM,
         )
 
     def _draw_pcb_part(self) -> OpenSCADObject | None:
@@ -116,4 +114,4 @@ class KailhChocKey(Key):
     footprint_plate: XY = spacing
     footprint_pcb: XY = hole_size
 
-    openscad_file_path = "keyboardgenerator/KeyHotswap.stl"
+    openscad_file_path = "./stl/KeyHotswap.stl"

@@ -40,7 +40,6 @@ def _generate_keyboard(
     keyboard_bottom = Keyboard.from_kle_obj(keyboard_json)
     bottom = keyboard_bottom.draw_bottom()
     if split_keyboard:
-        bottom = keyboard_bottom.draw_bottom()
         bottom += keyboard_bottom.draw_bottom().mirror(RIGHT).left(10)
 
     log.info("Done creating keyboard\n")

@@ -56,17 +56,13 @@ class PlateTextPart(Part):
 
     def draw_plate_part_addition_sub(self) -> OpenSCADObject | None:
         lines = self.text.split("\n")
-        if len(lines) > 0:
-            max_char = 0
-            for line in lines:
-                max_char = len(line) if len(line) > max_char else max_char
-            texts = union()
-            for line_number, line_text in enumerate(lines):
-                texts += self._draw_text(
-                    line_text, self.mirror_side, max_char, line_number * 10
-                )
-
-        return texts if (self.mirror_affect and self.mirror_side) else texts
+        max_char = max(len(line) for line in lines)
+        texts = union()
+        for line_number, line_text in enumerate(lines):
+            texts += self._draw_text(
+                line_text, self.mirror_side, max_char, line_number * 10
+            )
+        return texts
 
     def draw_plate_part_addition_add(self) -> OpenSCADObject | None:
         return None
