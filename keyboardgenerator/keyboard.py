@@ -25,6 +25,7 @@ from keyboardgenerator.keys import Key, KailhChocKey, CherryMxKey
 from keyboardgenerator.plate_text import PlateTextPart
 from keyboardgenerator.holes import Holes
 from keyboardgenerator.split_keyboard_connectors import SplitKeyboardConnector, TRRSJack
+from keyboardgenerator.camera_mount import CameraMount, CameraMountSelfTap, CameraMountHeatSet, TiltLeg
 from keyboardgenerator.constants import (
     PART_LABEL_INDEX,
     PROFILE_LABEL_INDEX,
@@ -52,6 +53,9 @@ _PART_REGISTRY: dict[str, type] = {
         TRRSJack,
         CherryMxKey,
         Holes,
+        CameraMountSelfTap,
+        CameraMountHeatSet,
+        TiltLeg,
     ]
 }
 
@@ -257,7 +261,64 @@ class Keyboard:
             + part_addition_add
         )
 
+    def _get_right_edge_x(self) -> float:
+        # Exclude mounts and legs — they ARE the contact points, not the resting edge
+        body_parts = [
+            p for p in self.parts_list
+            if not isinstance(p, (CameraMount, TiltLeg))
+        ]
+        return max(
+            c.x
+            for part in body_parts
+            for c in part.corners.get_coruners()
+        )
+
+    def _validate_and_set_leg_heights(self):
+        tilt_legs = [p for p in self.parts_list if isinstance(p, TiltLeg)]
+        if not tilt_legs:
+            return
+
+        camera_mounts = [p for p in self.parts_list if isinstance(p, CameraMount)]
+        if not camera_mounts:
+            raise ValueError(
+                "TiltLegs require a CameraMount on the same keyboard half."
+            )
+        if len(camera_mounts) > 1:
+            raise ValueError(
+                "Only one CameraMount per keyboard half is supported."
+            )
+
+        mount = camera_mounts[0]
+        boss_x = mount.center_point.x
+        boss_height = mount.boss_height
+        right_edge_x = self._get_right_edge_x()
+
+        if boss_x >= right_edge_x:
+            raise ValueError(
+                f"CameraMount (x={boss_x:.1f}mm) must be to the left of "
+                f"the keyboard's right edge (x={right_edge_x:.1f}mm)."
+            )
+
+        for leg in tilt_legs:
+            leg_x = leg.center_point.x
+            if leg_x >= boss_x:
+                raise ValueError(
+                    f"TiltLeg (x={leg_x:.1f}mm) must be to the left of "
+                    f"CameraMount (x={boss_x:.1f}mm). "
+                    "Legs must be on the inner side of the boss."
+                )
+
+            # The tilt plane runs from (right_edge_x, z=0) to (boss_x, z=-boss_height).
+            # At the leg's x position the plane is at z = -boss_height * (right_edge_x - leg_x)
+            #                                                             / (right_edge_x - boss_x)
+            required_height = boss_height * (right_edge_x - leg_x) / (right_edge_x - boss_x)
+            leg.height = required_height
+            log.info(
+                f"TiltLeg at x={leg_x:.1f}mm: auto-calculated height={required_height:.2f}mm"
+            )
+
     def draw_bottom(self) -> OpenSCADObject:
+        self._validate_and_set_leg_heights()
         bottom_objs = self._draw_base_plate(add_label=ADD_LABEL)
 
         for part in self.parts_list:
