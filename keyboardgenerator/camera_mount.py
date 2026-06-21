@@ -14,7 +14,7 @@ BOSS_DEFAULT_HEIGHT = 10.0
 LEG_DIAMETER = 10.0
 # Width of the conical chamfer at the base of boss and legs.
 # Adds a flare where the feature meets the plate for better adhesion and strength.
-CHAMFER_SIZE = 2.0
+CHAMFER_SIZE = 4.0
 
 
 class CameraMount(Part):
