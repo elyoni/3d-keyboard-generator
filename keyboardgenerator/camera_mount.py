@@ -1,4 +1,4 @@
-from solid2.extensions.bosl2 import cylinder, sphere, TOP
+from solid2.extensions.bosl2 import cylinder, sphere, TOP, BOTTOM
 from solid2.core.object_base import OpenSCADObject
 
 from keyboardgenerator.base import Part, XY
@@ -16,8 +16,13 @@ LEG_DIAMETER = 10.0
 
 class CameraMount(Part):
     """
-    Cylindrical boss on the bottom layer for a 1/4"-20 camera arm screw.
-    Protrudes downward; hole_diameter is set by subclasses.
+    Cylindrical boss on the outer (desk-facing) side of the bottom layer for
+    a 1/4"-20 camera arm screw.  The boss protrudes upward from the plate's
+    top face (z = BASIC_LAYER_THICKNESS) so it prints without supports and
+    points toward the desk when the keyboard is assembled.
+
+    The screw hole is a blind hole: it starts at the boss tip and ends at the
+    plate surface — it does NOT pass through the plate.
     """
 
     boss_outer_diameter: float = BOSS_OUTER_DIAMETER
@@ -32,25 +37,22 @@ class CameraMount(Part):
         return None
 
     def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
-        boss = cylinder(d=self.boss_outer_diameter, h=self.boss_height, anchor=TOP, _fn=50)
-        # Pre-cut the screw hole into the boss so the subtraction order doesn't matter.
-        # The hole extends 0.5mm above z=0 and 0.5mm below the boss tip for a clean cut.
-        hole = cylinder(
-            d=self.hole_diameter,
-            h=self.boss_height + 1.0,
-            anchor=TOP,
-            _fn=50,
-        ).up(0.5)
+        # Boss sits on top of the plate's outer face (z = BASIC_LAYER_THICKNESS).
+        boss = (
+            cylinder(d=self.boss_outer_diameter, h=self.boss_height, anchor=BOTTOM, _fn=50)
+            .up(BASIC_LAYER_THICKNESS)
+        )
+        # Blind screw hole: opens at the boss tip, stops at the plate surface.
+        # Extra 0.5 mm above the tip prevents z-fighting at the open end.
+        hole = (
+            cylinder(d=self.hole_diameter, h=self.boss_height + 0.5, anchor=TOP, _fn=50)
+            .up(BASIC_LAYER_THICKNESS + self.boss_height + 0.5)
+        )
         return boss - hole
 
     def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
-        # Cut the same hole through the base plate (z=0 → z=BASIC_LAYER_THICKNESS).
-        # Overlaps slightly with the boss hole at z=0 to avoid a gap.
-        plate_height = BASIC_LAYER_THICKNESS + 1.0
-        return (
-            cylinder(d=self.hole_diameter, h=plate_height, anchor=TOP, _fn=50)
-            .up(BASIC_LAYER_THICKNESS + 0.5)
-        )
+        # No through-hole in the plate — the screw stops inside the boss.
+        return None
 
 
 class CameraMountSelfTap(CameraMount):
@@ -69,10 +71,11 @@ class CameraMountHeatSet(CameraMount):
 
 class TiltLeg(Part):
     """
-    Cylindrical leg with a hemispherical tip on the bottom layer.
-    Height is auto-calculated by Keyboard.draw_bottom() so the leg tip
-    lies exactly on the tilt plane defined by the CameraMount boss and
-    the keyboard's outer edge.
+    Cylindrical leg with a hemispherical tip on the outer (desk-facing) side of
+    the bottom layer.  The leg protrudes upward from the plate's top face so it
+    prints without supports and points toward the desk when the keyboard is
+    assembled.  Height is auto-calculated by Keyboard.draw_bottom() so the leg
+    tip lies on the tilt plane defined by the CameraMount boss and the outer edge.
     """
 
     name: str = "tiltleg"
@@ -90,9 +93,11 @@ class TiltLeg(Part):
         if self.height <= 0:
             return None
         r = self.diameter / 2
-        # Cylinder shaft + hemispherical tip at the bottom.
-        # Shaft goes from z=0 (top) to z=-(height-r).
-        # Sphere is centred at z=-(height-r) so its lowest point is at z=-height.
-        shaft = cylinder(d=self.diameter, h=self.height - r, anchor=TOP, _fn=50)
-        rounded_tip = sphere(d=self.diameter, _fn=50).down(self.height - r)
+        # Shaft from plate surface (z = BASIC_LAYER_THICKNESS) upward.
+        # Hemisphere sits at the tip so the lowest contact point is rounded.
+        shaft = (
+            cylinder(d=self.diameter, h=self.height - r, anchor=BOTTOM, _fn=50)
+            .up(BASIC_LAYER_THICKNESS)
+        )
+        rounded_tip = sphere(d=self.diameter, _fn=50).up(BASIC_LAYER_THICKNESS + self.height - r)
         return shaft + rounded_tip
