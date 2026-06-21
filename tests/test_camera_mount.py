@@ -127,20 +127,21 @@ class TestLegValidationErrors:
         with pytest.raises(ValueError, match="CameraMount"):
             kb._validate_and_set_leg_heights()
 
-    def test_leg_to_right_of_boss_raises(self):
-        keys = _make_keys(5)
-        mount = _make_part(CameraMountSelfTap, 40.0, 10.0)
-        leg = _make_part(TiltLeg, 70.0, 10.0)  # right of boss
-        kb = Keyboard(keys + [mount, leg], plate_border=0)
-        with pytest.raises(ValueError, match="left of"):
-            kb._validate_and_set_leg_heights()
-
     def test_leg_at_same_x_as_boss_raises(self):
         keys = _make_keys(5)
         mount = _make_part(CameraMountSelfTap, 40.0, 10.0)
         leg = _make_part(TiltLeg, 40.0, 10.0)
         kb = Keyboard(keys + [mount, leg], plate_border=0)
-        with pytest.raises(ValueError, match="left of"):
+        with pytest.raises(ValueError, match="same x position"):
+            kb._validate_and_set_leg_heights()
+
+    def test_legs_on_both_sides_raises(self):
+        keys = _make_keys(5)
+        mount = _make_part(CameraMountSelfTap, 40.0, 10.0)
+        leg_left = _make_part(TiltLeg, 10.0, 10.0)
+        leg_right = _make_part(TiltLeg, 70.0, 10.0)
+        kb = Keyboard(keys + [mount, leg_left, leg_right], plate_border=0)
+        with pytest.raises(ValueError, match="same side"):
             kb._validate_and_set_leg_heights()
 
     def test_boss_to_right_of_keyboard_raises(self):
@@ -151,6 +152,15 @@ class TestLegValidationErrors:
         with pytest.raises(ValueError, match="right edge"):
             kb._validate_and_set_leg_heights()
 
+    def test_boss_to_left_of_left_edge_raises(self):
+        # Left-half orientation: legs to the right of boss, but boss is outside hull
+        keys = _make_keys(5, start_x=50.0)  # keys start at x=50mm
+        mount = _make_part(CameraMountSelfTap, 30.0, 10.0)  # boss left of all keys
+        leg = _make_part(TiltLeg, 80.0, 10.0)  # leg right of boss
+        kb = Keyboard(keys + [mount, leg], plate_border=0)
+        with pytest.raises(ValueError, match="left edge"):
+            kb._validate_and_set_leg_heights()
+
     def test_multiple_mounts_raises(self):
         keys = _make_keys(5)
         mount1 = _make_part(CameraMountSelfTap, 40.0, 10.0)
@@ -159,3 +169,46 @@ class TestLegValidationErrors:
         kb = Keyboard(keys + [mount1, mount2, leg], plate_border=0)
         with pytest.raises(ValueError, match="Only one"):
             kb._validate_and_set_leg_heights()
+
+
+class TestLegHeightCalculationLeftHalf:
+    """Tests for left-half orientation: outer edge on left, legs to the right of boss."""
+
+    def _keyboard(self, boss_center_x, leg_center_xs, boss_height=10.0, start_x=0.0):
+        keys = _make_keys(5, start_x=start_x)
+        mount = _make_part(CameraMountSelfTap, boss_center_x, 10.0, boss_height=boss_height)
+        legs = [_make_part(TiltLeg, lx, 10.0) for lx in leg_center_xs]
+        return Keyboard(keys + [mount] + legs, plate_border=0)
+
+    def test_leg_height_calculated_for_right_side_legs(self):
+        # Keys from 0 to RIGHT_EDGE, boss at 40mm, leg at 70mm (right of boss)
+        kb = self._keyboard(boss_center_x=40.0, leg_center_xs=[70.0], boss_height=10.0)
+        kb._validate_and_set_leg_heights()
+        leg = [p for p in kb.parts_list if isinstance(p, TiltLeg)][0]
+        # outer_x ≈ 0 (left edge of keys), boss=40, leg=70
+        # height = 10 * (70 - 0) / (40 - 0) = 17.5
+        left_edge = min(
+            c.x for part in kb.parts_list
+            if not isinstance(part, (CameraMount, TiltLeg))
+            for c in part.corners.get_coruners()
+        )
+        expected = 10.0 * (70.0 - left_edge) / (40.0 - left_edge)
+        assert leg.height == pytest.approx(expected, rel=1e-4)
+
+    def test_farther_right_leg_is_taller(self):
+        kb = self._keyboard(boss_center_x=40.0, leg_center_xs=[60.0, 80.0], boss_height=10.0)
+        kb._validate_and_set_leg_heights()
+        legs = sorted(
+            [p for p in kb.parts_list if isinstance(p, TiltLeg)],
+            key=lambda p: p.center_point.x,
+        )
+        assert legs[1].height > legs[0].height  # further right → taller
+
+    def test_taller_boss_produces_taller_legs_left_half(self):
+        kb_low = self._keyboard(boss_center_x=40.0, leg_center_xs=[70.0], boss_height=8.0)
+        kb_high = self._keyboard(boss_center_x=40.0, leg_center_xs=[70.0], boss_height=15.0)
+        kb_low._validate_and_set_leg_heights()
+        kb_high._validate_and_set_leg_heights()
+        leg_low = [p for p in kb_low.parts_list if isinstance(p, TiltLeg)][0]
+        leg_high = [p for p in kb_high.parts_list if isinstance(p, TiltLeg)][0]
+        assert leg_high.height > leg_low.height

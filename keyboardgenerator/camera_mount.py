@@ -1,4 +1,4 @@
-from solid2.extensions.bosl2 import cylinder, TOP
+from solid2.extensions.bosl2 import cylinder, sphere, TOP
 from solid2.core.object_base import OpenSCADObject
 
 from keyboardgenerator.base import Part, XY
@@ -32,19 +32,23 @@ class CameraMount(Part):
         return None
 
     def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
-        # Boss protrudes downward from z=0 (the bottom face of the keyboard)
-        return cylinder(
-            d=self.boss_outer_diameter,
-            h=self.boss_height,
+        boss = cylinder(d=self.boss_outer_diameter, h=self.boss_height, anchor=TOP, _fn=50)
+        # Pre-cut the screw hole into the boss so the subtraction order doesn't matter.
+        # The hole extends 0.5mm above z=0 and 0.5mm below the boss tip for a clean cut.
+        hole = cylinder(
+            d=self.hole_diameter,
+            h=self.boss_height + 1.0,
             anchor=TOP,
             _fn=50,
-        )
+        ).up(0.5)
+        return boss - hole
 
     def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
-        # Hole runs from above the bottom layer down through the full boss
-        total_height = self.boss_height + BASIC_LAYER_THICKNESS + 1.0
+        # Cut the same hole through the base plate (z=0 → z=BASIC_LAYER_THICKNESS).
+        # Overlaps slightly with the boss hole at z=0 to avoid a gap.
+        plate_height = BASIC_LAYER_THICKNESS + 1.0
         return (
-            cylinder(d=self.hole_diameter, h=total_height, anchor=TOP, _fn=50)
+            cylinder(d=self.hole_diameter, h=plate_height, anchor=TOP, _fn=50)
             .up(BASIC_LAYER_THICKNESS + 0.5)
         )
 
@@ -65,10 +69,10 @@ class CameraMountHeatSet(CameraMount):
 
 class TiltLeg(Part):
     """
-    Cylindrical leg on the bottom layer that tilts the keyboard.
+    Cylindrical leg with a hemispherical tip on the bottom layer.
     Height is auto-calculated by Keyboard.draw_bottom() so the leg tip
     lies exactly on the tilt plane defined by the CameraMount boss and
-    the keyboard's right (outer) edge.
+    the keyboard's outer edge.
     """
 
     name: str = "tiltleg"
@@ -85,4 +89,10 @@ class TiltLeg(Part):
     def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
         if self.height <= 0:
             return None
-        return cylinder(d=self.diameter, h=self.height, anchor=TOP, _fn=50)
+        r = self.diameter / 2
+        # Cylinder shaft + hemispherical tip at the bottom.
+        # Shaft goes from z=0 (top) to z=-(height-r).
+        # Sphere is centred at z=-(height-r) so its lowest point is at z=-height.
+        shaft = cylinder(d=self.diameter, h=self.height - r, anchor=TOP, _fn=50)
+        rounded_tip = sphere(d=self.diameter, _fn=50).down(self.height - r)
+        return shaft + rounded_tip

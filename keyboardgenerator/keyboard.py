@@ -273,6 +273,17 @@ class Keyboard:
             for c in part.corners.get_coruners()
         )
 
+    def _get_left_edge_x(self) -> float:
+        body_parts = [
+            p for p in self.parts_list
+            if not isinstance(p, (CameraMount, TiltLeg))
+        ]
+        return min(
+            c.x
+            for part in body_parts
+            for c in part.corners.get_coruners()
+        )
+
     def _validate_and_set_leg_heights(self):
         tilt_legs = [p for p in self.parts_list if isinstance(p, TiltLeg)]
         if not tilt_legs:
@@ -291,31 +302,52 @@ class Keyboard:
         mount = camera_mounts[0]
         boss_x = mount.center_point.x
         boss_height = mount.boss_height
-        right_edge_x = self._get_right_edge_x()
 
-        if boss_x >= right_edge_x:
+        legs_left = [leg for leg in tilt_legs if leg.center_point.x < boss_x]
+        legs_right = [leg for leg in tilt_legs if leg.center_point.x > boss_x]
+        legs_at_boss = [leg for leg in tilt_legs if leg.center_point.x == boss_x]
+
+        if legs_at_boss:
+            lx = legs_at_boss[0].center_point.x
             raise ValueError(
-                f"CameraMount (x={boss_x:.1f}mm) must be to the left of "
-                f"the keyboard's right edge (x={right_edge_x:.1f}mm)."
+                f"TiltLeg (x={lx:.1f}mm) cannot be at the same x position "
+                f"as CameraMount (x={boss_x:.1f}mm)."
+            )
+        if legs_left and legs_right:
+            raise ValueError(
+                "All TiltLegs must be on the same side of the CameraMount."
             )
 
-        for leg in tilt_legs:
-            leg_x = leg.center_point.x
-            if leg_x >= boss_x:
+        if legs_left:
+            # Right-half orientation: outer edge on the right, legs on the left (inner side).
+            outer_x = self._get_right_edge_x()
+            if boss_x >= outer_x:
                 raise ValueError(
-                    f"TiltLeg (x={leg_x:.1f}mm) must be to the left of "
-                    f"CameraMount (x={boss_x:.1f}mm). "
-                    "Legs must be on the inner side of the boss."
+                    f"CameraMount (x={boss_x:.1f}mm) must be to the left of "
+                    f"the keyboard's right edge (x={outer_x:.1f}mm)."
                 )
-
-            # The tilt plane runs from (right_edge_x, z=0) to (boss_x, z=-boss_height).
-            # At the leg's x position the plane is at z = -boss_height * (right_edge_x - leg_x)
-            #                                                             / (right_edge_x - boss_x)
-            required_height = boss_height * (right_edge_x - leg_x) / (right_edge_x - boss_x)
-            leg.height = required_height
-            log.info(
-                f"TiltLeg at x={leg_x:.1f}mm: auto-calculated height={required_height:.2f}mm"
-            )
+            for leg in tilt_legs:
+                leg_x = leg.center_point.x
+                required_height = boss_height * (outer_x - leg_x) / (outer_x - boss_x)
+                leg.height = required_height
+                log.info(
+                    f"TiltLeg at x={leg_x:.1f}mm: auto-calculated height={required_height:.2f}mm"
+                )
+        else:
+            # Left-half orientation: outer edge on the left, legs on the right (inner side).
+            outer_x = self._get_left_edge_x()
+            if boss_x <= outer_x:
+                raise ValueError(
+                    f"CameraMount (x={boss_x:.1f}mm) must be to the right of "
+                    f"the keyboard's left edge (x={outer_x:.1f}mm)."
+                )
+            for leg in tilt_legs:
+                leg_x = leg.center_point.x
+                required_height = boss_height * (leg_x - outer_x) / (boss_x - outer_x)
+                leg.height = required_height
+                log.info(
+                    f"TiltLeg at x={leg_x:.1f}mm: auto-calculated height={required_height:.2f}mm"
+                )
 
     def draw_bottom(self) -> OpenSCADObject:
         self._validate_and_set_leg_heights()
