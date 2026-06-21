@@ -115,7 +115,7 @@ def main():
     # keyboard_json = hardcoded_jsons.almost_there()
     # keyboard_json = hardcoded_jsons.arduino_only()  # one_board_tez_v4()
     # keyboard_json = hardcoded_jsons.one_board_tez_v4()  # one_board_tez_v4()
-    keyboard_json = hardcoded_jsons.tez_v3()  # one_board_tez_v4()
+    keyboard_json = hardcoded_jsons.camera_mount_test()
     plate, pcb, bottom = _generate_keyboard(keyboard_json)
     _generate_keyboard_openscad_files(plate, pcb, bottom)
 

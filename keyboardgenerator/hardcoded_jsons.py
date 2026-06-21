@@ -198,6 +198,31 @@ def tez_v3() -> kle_serial.Keyboard:
     return keyboard
 
 
+def camera_mount_test() -> kle_serial.Keyboard:
+    """
+    Simple test layout to verify the CameraMount + TiltLeg feature.
+
+    Layout (right half, outer edge on the right):
+      - Two TiltLegs on the inner (left) side, upper and lower corners
+      - Two rows of Cherry MX keys in the middle
+      - One CameraMountSelfTap boss below the key cluster, centred horizontally
+
+    Positions (Cherry MX spacing = 19.05 mm/u):
+      Leg centre x  ≈  4.8 mm  (x = 0.25 u)
+      Boss centre x ≈ 57.2 mm  (x = 3.0 u)
+      Right edge    ≈ 114.3 mm (5 keys × 19.05 mm, starting at x = 1 u)
+      → auto-calculated leg height ≈ 19.2 mm  (~10° tent)
+    """
+    keyboard = kle_serial.parse(
+        r"""[
+[{sm:"tiltleg",w:0.5,h:0.5},"Leg",{x:0.5,sm:"cherry",a:4},"Q","W","E","R","T"],
+[{y:-0.5,sm:"tiltleg",w:0.5,h:0.5},"Leg",{x:0.5,sm:"cherry",a:4},"A","S","D","F","G"],
+[{y:0.5,x:2.75,sm:"cameramount_selftap",w:0.5,h:0.5},"Mount"]
+]"""
+    )
+    return keyboard
+
+
 def almost_there() -> kle_serial.Keyboard:
     Keyboard = kle_serial.parse(
         """[
