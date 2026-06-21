@@ -12,6 +12,9 @@ HEAT_SET_HOLE_DIAMETER = 7.0
 BOSS_OUTER_DIAMETER = 14.0
 BOSS_DEFAULT_HEIGHT = 10.0
 LEG_DIAMETER = 10.0
+# Width of the conical chamfer at the base of boss and legs.
+# Adds a flare where the feature meets the plate for better adhesion and strength.
+CHAMFER_SIZE = 2.0
 
 
 class CameraMount(Part):
@@ -20,6 +23,10 @@ class CameraMount(Part):
     a 1/4"-20 camera arm screw.  The boss protrudes upward from the plate's
     top face (z = BASIC_LAYER_THICKNESS) so it prints without supports and
     points toward the desk when the keyboard is assembled.
+
+    Print orientation: lay the flat PCB-facing face (z = 0) on the print bed;
+    the boss will stick upward during printing.  After printing, assemble the
+    keyboard with the boss/legs facing down.
 
     The screw hole is a blind hole: it starts at the boss tip and ends at the
     plate surface — it does NOT pass through the plate.
@@ -37,10 +44,28 @@ class CameraMount(Part):
         return None
 
     def _draw_bottom_part_addition_add(self) -> OpenSCADObject | None:
-        # Boss sits on top of the plate's outer face (z = BASIC_LAYER_THICKNESS).
-        boss = (
-            cylinder(d=self.boss_outer_diameter, h=self.boss_height, anchor=BOTTOM, _fn=50)
+        chamfer = min(CHAMFER_SIZE, self.boss_height * 0.4)
+
+        # Conical chamfer flare at the plate surface for structural support.
+        base_cone = (
+            cylinder(
+                h=chamfer,
+                d1=self.boss_outer_diameter + 2 * chamfer,
+                d2=self.boss_outer_diameter,
+                anchor=BOTTOM,
+                _fn=50,
+            )
             .up(BASIC_LAYER_THICKNESS)
+        )
+        # Main boss cylinder above the chamfer.
+        main_boss = (
+            cylinder(
+                d=self.boss_outer_diameter,
+                h=self.boss_height - chamfer,
+                anchor=BOTTOM,
+                _fn=50,
+            )
+            .up(BASIC_LAYER_THICKNESS + chamfer)
         )
         # Blind screw hole: opens at the boss tip, stops at the plate surface.
         # Extra 0.5 mm above the tip prevents z-fighting at the open end.
@@ -48,7 +73,7 @@ class CameraMount(Part):
             cylinder(d=self.hole_diameter, h=self.boss_height + 0.5, anchor=TOP, _fn=50)
             .up(BASIC_LAYER_THICKNESS + self.boss_height + 0.5)
         )
-        return boss - hole
+        return (base_cone + main_boss) - hole
 
     def _draw_bottom_part_addition_sub(self) -> OpenSCADObject | None:
         # No through-hole in the plate — the screw stops inside the boss.
@@ -71,11 +96,11 @@ class CameraMountHeatSet(CameraMount):
 
 class TiltLeg(Part):
     """
-    Cylindrical leg with a hemispherical tip on the outer (desk-facing) side of
-    the bottom layer.  The leg protrudes upward from the plate's top face so it
-    prints without supports and points toward the desk when the keyboard is
-    assembled.  Height is auto-calculated by Keyboard.draw_bottom() so the leg
-    tip lies on the tilt plane defined by the CameraMount boss and the outer edge.
+    Cylindrical leg with a hemispherical tip and a conical chamfer base.
+    Protrudes upward from the plate's outer face (z = BASIC_LAYER_THICKNESS)
+    so it prints without supports and points toward the desk when assembled.
+    Height is auto-calculated by Keyboard.draw_bottom() so the leg tip lies
+    on the tilt plane defined by the CameraMount boss and the outer edge.
     """
 
     name: str = "tiltleg"
@@ -93,11 +118,24 @@ class TiltLeg(Part):
         if self.height <= 0:
             return None
         r = self.diameter / 2
-        # Shaft from plate surface (z = BASIC_LAYER_THICKNESS) upward.
-        # Hemisphere sits at the tip so the lowest contact point is rounded.
-        shaft = (
-            cylinder(d=self.diameter, h=self.height - r, anchor=BOTTOM, _fn=50)
+        chamfer = min(CHAMFER_SIZE, (self.height - r) * 0.4)
+
+        # Conical chamfer flare at the plate surface for structural support.
+        base_cone = (
+            cylinder(
+                h=chamfer,
+                d1=self.diameter + 2 * chamfer,
+                d2=self.diameter,
+                anchor=BOTTOM,
+                _fn=50,
+            )
             .up(BASIC_LAYER_THICKNESS)
         )
+        # Straight shaft from the top of the chamfer to the start of the hemisphere.
+        shaft = (
+            cylinder(d=self.diameter, h=self.height - r - chamfer, anchor=BOTTOM, _fn=50)
+            .up(BASIC_LAYER_THICKNESS + chamfer)
+        )
+        # Hemispherical tip — its lowest point is the desk contact point.
         rounded_tip = sphere(d=self.diameter, _fn=50).up(BASIC_LAYER_THICKNESS + self.height - r)
-        return shaft + rounded_tip
+        return base_cone + shaft + rounded_tip
