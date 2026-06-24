@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Keyboard Layout Editor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header id="app-header">
+    <h1>⌨ Keyboard Editor</h1>
+
+    <div class="header-sep"></div>
+
+    <!-- Preset selector -->
+    <div class="header-setting preset-setting">
+      <label for="preset-select">Load preset</label>
+      <select id="preset-select">
+        <!-- populated by app.js -->
+      </select>
+      <button id="btn-load-preset" class="header-btn">Load</button>
+    </div>
+
+    <div class="header-sep"></div>
+
+    <div class="header-setting">
+      <label for="setting-split">Split</label>
+      <input type="checkbox" id="setting-split" title="Generate one half — Python tool mirrors it automatically">
+    </div>
+
+    <div class="header-setting">
+      <label for="setting-switch-type">Switch</label>
+      <select id="setting-switch-type">
+        <option value="cherrymx">Cherry MX</option>
+        <option value="kailhchockey">Kailh Choc</option>
+      </select>
+    </div>
+
+    <div class="header-setting">
+      <label for="setting-border">Border mm</label>
+      <input type="number" id="setting-border" value="0" min="0" max="20" step="1">
+    </div>
+
+    <div class="header-setting">
+      <label for="setting-snap">Snap KU</label>
+      <input type="number" id="setting-snap" value="0.25" min="0.05" max="1" step="0.05">
+    </div>
+
+    <div class="header-sep"></div>
+
+    <div class="view-tabs">
+      <button class="view-tab active" id="tab-editor">Editor</button>
+      <button class="view-tab" id="tab-3d">3D View</button>
+    </div>
+  </header>
+
+  <div id="app-body">
+    <div id="app-main">
+
+      <!-- Left: Component Toolbar -->
+      <aside id="toolbar">
+        <!-- Built dynamically by app.js -->
+      </aside>
+
+      <!-- Center -->
+      <div id="center-area">
+
+        <!-- Editor Canvas -->
+        <section id="editor-section">
+          <canvas id="editor-canvas"></canvas>
+          <div class="editor-toolbar">
+            <button id="btn-fit" title="Fit all components to window">Fit view</button>
+          </div>
+          <div id="shortcuts-hint">
+            Select tool → click to place (tool stays active) &nbsp;·&nbsp;
+            Esc to deselect &nbsp;·&nbsp; Del to delete &nbsp;·&nbsp;
+            Ctrl+Z/Y undo/redo &nbsp;·&nbsp; Scroll zoom &nbsp;·&nbsp; Alt+drag pan
+          </div>
+        </section>
+
+        <!-- 3D Viewer -->
+        <section id="viewer-section" hidden>
+          <div id="viewer-3d"></div>
+          <div class="viewer-controls">
+            <div class="viewer-ctrl-group">
+              <span class="viewer-ctrl-label">Layers</span>
+              <label><input type="checkbox" id="layer-vis-bottom" checked> Bottom</label>
+              <label><input type="checkbox" id="layer-vis-pcb"    checked> PCB</label>
+              <label><input type="checkbox" id="layer-vis-plate"  checked> Plate</label>
+            </div>
+            <div class="viewer-ctrl-group">
+              <label><input type="checkbox" id="exploded-toggle"> Exploded view</label>
+            </div>
+            <button id="reset-camera">Reset camera</button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right: Properties Panel -->
+      <aside id="properties-panel">
+        <!-- Built dynamically by properties.js -->
+      </aside>
+
+    </div>
+
+    <!-- Bottom: JSON Panel -->
+    <section id="json-section">
+      <div id="json-panel-header">
+        <h2>KLE JSON</h2>
+        <button class="json-btn" id="btn-copy">Copy</button>
+        <button class="json-btn" id="btn-download">Download</button>
+        <button class="json-btn btn-load" id="btn-load">Load ↑</button>
+        <button class="json-btn btn-clear" id="btn-clear">Clear</button>
+        <span class="json-hint">Ctrl+Enter to load &nbsp;·&nbsp; Paste KLE JSON here and click Load</span>
+      </div>
+      <textarea id="kle-json-output" spellcheck="false" placeholder="KLE JSON will appear here as you build your layout…"></textarea>
+      <div id="json-error" hidden></div>
+    </section>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
