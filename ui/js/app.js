@@ -55,6 +55,7 @@ class App {
     this._viewer3d = new Viewer3D(viewerContainer, this);
 
     document.getElementById('btn-fit').addEventListener('click', () => this._editor.fitToWindow());
+    this._buildFileIO();
 
     // Restore from localStorage or start empty
     if (!this._loadFromStorage()) {
@@ -338,6 +339,64 @@ class App {
   _syncSnapUI() {
     const snapInp = document.getElementById('setting-snap');
     if (snapInp) snapInp.value = this.state.snapSize;
+  }
+
+  // ── File I/O ─────────────────────────────────────────────────────────────────
+
+  _buildFileIO() {
+    // Load JSON file
+    const fileInput = document.getElementById('load-json-file');
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      fileInput.value = '';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { components, globalSettings } = parseKLE(e.target.result);
+          this.loadLayout(components, globalSettings);
+        } catch (err) {
+          alert(`Failed to load JSON: ${err.message}`);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Generate 3D
+    document.getElementById('btn-generate').addEventListener('click', () => this._generate3D());
+  }
+
+  async _generate3D() {
+    const btn = document.getElementById('btn-generate');
+    const kle = serializeKLE(this.state.components, this.state.globalSettings);
+    const { split, switchType, borderSize } = this.state.globalSettings;
+
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kle, split, switchType, borderSize }),
+      });
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: res.statusText }));
+        alert(`Generation failed: ${error}`);
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'keyboard.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(`Could not reach the generator server: ${err.message}\n\nMake sure you started the UI with "tusk ui".`);
+    } finally {
+      btn.textContent = 'Generate 3D';
+      btn.disabled = false;
+    }
   }
 
   // ── View tabs ────────────────────────────────────────────────────────────────

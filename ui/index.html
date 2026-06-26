@@ -49,6 +49,19 @@
 
     <div class="header-sep"></div>
 
+    <!-- Load JSON file -->
+    <div class="header-setting">
+      <label class="header-btn file-label" for="load-json-file" title="Load a KLE JSON file from disk">Load JSON file</label>
+      <input type="file" id="load-json-file" accept=".json" style="display:none">
+    </div>
+
+    <!-- Generate 3D -->
+    <div class="header-setting">
+      <button id="btn-generate" class="header-btn btn-generate" title="Send layout to the Python backend and download SCAD files">Generate 3D</button>
+    </div>
+
+    <div class="header-sep"></div>
+
     <div class="view-tabs">
       <button class="view-tab active" id="tab-editor">Editor</button>
       <button class="view-tab" id="tab-3d">3D View</button>

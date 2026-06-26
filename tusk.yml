@@ -1,3 +1,5 @@
 tasks:
   run:
     run: poetry run python3 keyboardgenerator/main.py
+  ui:
+    run: poetry run python3 -m keyboardgenerator.server & sleep 0.5 && xdg-open http://localhost:8765

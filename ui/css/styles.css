@@ -96,6 +96,9 @@ html, body {
   transition: opacity 0.1s;
 }
 .header-btn:hover { opacity: 0.85; }
+.header-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.file-label { display: inline-block; }
+.btn-generate { background: #2a7a2a; }
 
 .header-setting input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
 
