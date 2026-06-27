@@ -129,13 +129,13 @@ export function serializeKLE(components, globalSettings) {
       kleRow.push(props);
       kleRow.push(firstComp.label || firstComp.p || getDefaultLabel(firstComp.type));
 
-      // Remaining components in row
+      // Remaining components in row — r is already set in the row header, never repeat it
       let cursorX = firstComp.absX + firstComp.w;
       for (const comp of row.items.slice(1)) {
         const p = {};
         const xDelta = round4(comp.absX - cursorX);
         if (!approxEqual(xDelta, 0)) p.x = xDelta;
-        addCompProps(p, comp);
+        addCompProps(p, comp, /* skipR */ true);
         if (Object.keys(p).length > 0) kleRow.push(p);
         kleRow.push(comp.label || comp.p || getDefaultLabel(comp.type));
         cursorX = comp.absX + comp.w;
@@ -182,15 +182,14 @@ export function serializeKLE(components, globalSettings) {
   return JSON.stringify(kleRows, null, 2);
 }
 
-function addCompProps(p, comp) {
+function addCompProps(p, comp, skipR = false) {
   const def = COMPONENTS[comp.type];
   if (def.smValue && def.smValue !== 'cherry') {
     p.sm = def.smValue;
   }
   if (!approxEqual(comp.w, 1)) p.w = round4(comp.w);
   if (!approxEqual(comp.h, 1)) p.h = round4(comp.h);
-  if (!approxEqual(comp.r, 0) && !('r' in p)) {
-    // Only add r if not already set as part of rotation group header
+  if (!skipR && !approxEqual(comp.r, 0) && !('r' in p)) {
     p.r = round4(comp.r);
   }
 }
